@@ -1,0 +1,454 @@
+<Page x:Class="calendarrrrrrrrrr.Views.DashboardView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      mc:Ignorable="d"
+      Title="Dashboard"
+      Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Background="Transparent">
+
+        <StackPanel Margin="32,28,32,32">
+
+            <!-- Header -->
+            <Grid Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Good Morning, Admin"
+                               FontFamily="{StaticResource UIFont}"
+                               FontSize="12"
+                               Foreground="{StaticResource TextMutedBrush}"
+                               Margin="0,0,0,4"/>
+                    <TextBlock Text="Dashboard Overview"
+                               FontFamily="{StaticResource DisplayFont}"
+                               FontSize="32"
+                               Foreground="{StaticResource TextPrimaryColor}"
+                               FontWeight="Light"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom">
+                    <Button Content="+ New Booking"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="BtnNewBooking_Click"/>
+                    <Button Content="Check In Guest"
+                            Style="{StaticResource GhostButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- KPI Cards -->
+            <UniformGrid Columns="4" Margin="0,0,0,24">
+
+                <!-- Occupancy -->
+                <Border Style="{StaticResource StatCardStyle}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <Border Background="#1A67A16F" CornerRadius="8"
+                                Width="36" Height="36"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,12">
+                            <iconPacks:PackIconMaterial Kind="PercentOutline"
+                                                        Width="18" Height="18"
+                                                        Foreground="{StaticResource StatusAvailableBrush}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="OCCUPANCY RATE"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryColor}"
+                                   Margin="0,0,0,6"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="87"
+                                       FontFamily="{StaticResource DisplayFont}"
+                                       FontSize="36"
+                                       Foreground="{StaticResource TextPrimaryColor}"/>
+                            <TextBlock Text="%"
+                                       FontFamily="{StaticResource UIFont}"
+                                       FontSize="16"
+                                       Foreground="{StaticResource GoldPrimaryBrush}"
+                                       VerticalAlignment="Bottom"
+                                       Margin="2,0,0,6"/>
+                        </StackPanel>
+                        <ProgressBar Style="{StaticResource GoldProgressBarStyle}"
+                                     Value="87" Maximum="100"
+                                     Margin="0,8,0,0"/>
+                        <TextBlock Text="↑ 4% vs last week"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource StatusAvailableBrush}"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Arrivals -->
+                <Border Style="{StaticResource StatCardStyle}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <Border Background="#1AB78354" CornerRadius="8"
+                                Width="36" Height="36"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,12">
+                            <iconPacks:PackIconMaterial Kind="ArrowCollapseDown"
+                                                        Width="18" Height="18"
+                                                        Foreground="{StaticResource GoldPrimaryBrush}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="TODAY'S ARRIVALS"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryColor}"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock Text="12"
+                                   FontFamily="{StaticResource DisplayFont}"
+                                   FontSize="36"
+                                   Foreground="{StaticResource TextPrimaryColor}"/>
+                        <TextBlock Text="3 pending check-in"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource StatusPendingBrush}"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Departures -->
+                <Border Style="{StaticResource StatCardStyle}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <Border Background="#1AD97B6E" CornerRadius="8"
+                                Width="36" Height="36"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,12">
+                            <iconPacks:PackIconMaterial Kind="ArrowCollapseUp"
+                                                        Width="18" Height="18"
+                                                        Foreground="{StaticResource StatusOccupiedBrush}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="TODAY'S DEPARTURES"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryColor}"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock Text="8"
+                                   FontFamily="{StaticResource DisplayFont}"
+                                   FontSize="36"
+                                   Foreground="{StaticResource TextPrimaryColor}"/>
+                        <TextBlock Text="2 late checkouts"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource StatusOccupiedBrush}"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Revenue -->
+                <Border Style="{StaticResource StatCardStyle}">
+                    <StackPanel>
+                        <Border Background="#1A7AAFCC" CornerRadius="8"
+                                Width="36" Height="36"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,12">
+                            <iconPacks:PackIconMaterial Kind="CurrencyUsd"
+                                                        Width="18" Height="18"
+                                                        Foreground="{StaticResource StatusCleaningBrush}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="TODAY'S REVENUE"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryColor}"
+                                   Margin="0,0,0,6"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="₱"
+                                       FontFamily="{StaticResource UIFont}"
+                                       FontSize="16"
+                                       Foreground="{StaticResource GoldPrimaryBrush}"
+                                       VerticalAlignment="Top"
+                                       Margin="0,6,2,0"/>
+                            <TextBlock Text="24,800"
+                                       FontFamily="{StaticResource DisplayFont}"
+                                       FontSize="36"
+                                       Foreground="{StaticResource TextPrimaryColor}"/>
+                        </StackPanel>
+                        <TextBlock Text="↑ ₱1,200 vs yesterday"
+                                   FontFamily="{StaticResource UIFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource StatusAvailableBrush}"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- Bottom Row -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="280"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Recent Activity -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardStyle}"
+                        Margin="0,0,16,0">
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <iconPacks:PackIconMaterial Kind="ClockOutline"
+                                                        Width="16" Height="16"
+                                                        Foreground="{StaticResource GoldPrimaryBrush}"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0,0,8,0"/>
+                            <TextBlock Text="Recent Activity"
+                                       FontFamily="{StaticResource DisplayFont}"
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextPrimaryColor}"/>
+                        </StackPanel>
+
+                        <!-- Item 1 -->
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="8" Height="8" CornerRadius="4"
+                                    Background="{StaticResource StatusAvailableBrush}"
+                                    VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Room 204 — Check-in completed"
+                                           FontFamily="{StaticResource UIFont}" FontSize="13"
+                                           Foreground="{StaticResource TextPrimaryColor}"/>
+                                <TextBlock Text="Guest: Maria Santos · Suite Deluxe"
+                                           FontFamily="{StaticResource UIFont}" FontSize="12"
+                                           Foreground="{StaticResource TextMutedColor}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="9:42 AM"
+                                       FontFamily="{StaticResource UIFont}" FontSize="12"
+                                       Foreground="{StaticResource TextMutedColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Item 2 -->
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="8" Height="8" CornerRadius="4"
+                                    Background="{StaticResource GoldPrimaryBrush}"
+                                    VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="New Reservation — Room 118"
+                                           FontFamily="{StaticResource UIFont}" FontSize="13"
+                                           Foreground="{StaticResource TextPrimaryColor}"/>
+                                <TextBlock Text="Guest: John Reyes · Standard Twin"
+                                           FontFamily="{StaticResource UIFont}" FontSize="12"
+                                           Foreground="{StaticResource TextMutedColor}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="9:15 AM"
+                                       FontFamily="{StaticResource UIFont}" FontSize="12"
+                                       Foreground="{StaticResource TextMutedColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Item 3 -->
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="8" Height="8" CornerRadius="4"
+                                    Background="{StaticResource StatusOccupiedBrush}"
+                                    VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Room 310 — Checkout"
+                                           FontFamily="{StaticResource UIFont}" FontSize="13"
+                                           Foreground="{StaticResource TextPrimaryColor}"/>
+                                <TextBlock Text="Guest: Ana Cruz · Invoice #1042 generated"
+                                           FontFamily="{StaticResource UIFont}" FontSize="12"
+                                           Foreground="{StaticResource TextMutedColor}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="8:50 AM"
+                                       FontFamily="{StaticResource UIFont}" FontSize="12"
+                                       Foreground="{StaticResource TextMutedColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Item 4 -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="8" Height="8" CornerRadius="4"
+                                    Background="{StaticResource StatusCleaningBrush}"
+                                    VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Housekeeping — Floor 2 complete"
+                                           FontFamily="{StaticResource UIFont}" FontSize="13"
+                                           Foreground="{StaticResource TextPrimaryColor}"/>
+                                <TextBlock Text="Rooms 201–210 marked clean"
+                                           FontFamily="{StaticResource UIFont}" FontSize="12"
+                                           Foreground="{StaticResource TextMutedColor}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="8:30 AM"
+                                       FontFamily="{StaticResource UIFont}" FontSize="12"
+                                       Foreground="{StaticResource TextMutedColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Room Status -->
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <iconPacks:PackIconMaterial Kind="BedDouble"
+                                                        Width="16" Height="16"
+                                                        Foreground="{StaticResource GoldPrimaryBrush}"
+                                                        VerticalAlignment="Center"
+                                                        Margin="0,0,8,0"/>
+                            <TextBlock Text="Room Status"
+                                       FontFamily="{StaticResource DisplayFont}"
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextPrimaryColor}"/>
+                        </StackPanel>
+
+                        <!-- Available -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" CornerRadius="999"
+                                    Background="#1A67A16F" Padding="8,4">
+                                <TextBlock Text="AVAILABLE" FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource StatusAvailableBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <ProgressBar Grid.Column="1"
+                                         Style="{StaticResource GoldProgressBarStyle}"
+                                         Foreground="{StaticResource StatusAvailableBrush}"
+                                         Value="18" Maximum="50"
+                                         VerticalAlignment="Center" Margin="8,0"/>
+                            <TextBlock Grid.Column="2" Text="18"
+                                       FontFamily="{StaticResource UIFont}" FontSize="13"
+                                       Foreground="{StaticResource TextPrimaryColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Occupied -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" CornerRadius="999"
+                                    Background="#1AD97B6E" Padding="8,4">
+                                <TextBlock Text="OCCUPIED" FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource StatusOccupiedBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <ProgressBar Grid.Column="1"
+                                         Style="{StaticResource GoldProgressBarStyle}"
+                                         Foreground="{StaticResource StatusOccupiedBrush}"
+                                         Value="24" Maximum="50"
+                                         VerticalAlignment="Center" Margin="8,0"/>
+                            <TextBlock Grid.Column="2" Text="24"
+                                       FontFamily="{StaticResource UIFont}" FontSize="13"
+                                       Foreground="{StaticResource TextPrimaryColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Cleaning -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" CornerRadius="999"
+                                    Background="#1A7AAFCC" Padding="8,4">
+                                <TextBlock Text="CLEANING" FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource StatusCleaningBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <ProgressBar Grid.Column="1"
+                                         Style="{StaticResource GoldProgressBarStyle}"
+                                         Foreground="{StaticResource StatusCleaningBrush}"
+                                         Value="5" Maximum="50"
+                                         VerticalAlignment="Center" Margin="8,0"/>
+                            <TextBlock Grid.Column="2" Text="5"
+                                       FontFamily="{StaticResource UIFont}" FontSize="13"
+                                       Foreground="{StaticResource TextPrimaryColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Maintenance -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" CornerRadius="999"
+                                    Background="#1A8B7B6E" Padding="8,4">
+                                <TextBlock Text="MAINTENANCE" FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource StatusMaintenanceBrush}"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <ProgressBar Grid.Column="1"
+                                         Style="{StaticResource GoldProgressBarStyle}"
+                                         Foreground="{StaticResource StatusMaintenanceBrush}"
+                                         Value="3" Maximum="50"
+                                         VerticalAlignment="Center" Margin="8,0"/>
+                            <TextBlock Grid.Column="2" Text="3"
+                                       FontFamily="{StaticResource UIFont}" FontSize="13"
+                                       Foreground="{StaticResource TextPrimaryColor}"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Separator Background="{StaticResource DividerColor}"
+                                   Height="1" Margin="0,10,0,10"/>
+
+                        <Grid>
+                            <TextBlock Text="TOTAL ROOMS"
+                                       FontFamily="{StaticResource UIFont}"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextSecondaryColor}"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="50"
+                                       FontFamily="{StaticResource DisplayFont}"
+                                       FontSize="20"
+                                       Foreground="{StaticResource GoldPrimaryBrush}"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</Page>

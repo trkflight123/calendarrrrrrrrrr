@@ -1,0 +1,213 @@
+<Window x:Class="calendarrrrrrrrrr.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Hotel Yncierto — Availability Calendar"
+        Icon="Assets/logo.png"
+        Height="900" Width="1400"
+        MinHeight="768" MinWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="{StaticResource UIFont}"
+        FontSize="{StaticResource FontMD}">
+
+    <Window.Resources>
+        <!-- Calendar Day Template -->
+        <DataTemplate x:Key="CalendarDayTemplate">
+            <Border Background="{Binding DayBackground}"
+                    BorderBrush="{StaticResource DividerBrush}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource CornerRadiusMD}"
+                    Margin="6"
+                    Cursor="Hand">
+                <Border.ToolTip>
+                    <StackPanel Orientation="Vertical" Margin="0">
+                        <TextBlock Text="{Binding DateDisplay}" FontWeight="Bold" FontSize="{StaticResource FontMD}"/>
+                        <TextBlock Text="{Binding StatusSummary}" FontSize="{StaticResource FontSM}"/>
+                    </StackPanel>
+                </Border.ToolTip>
+
+                <StackPanel Orientation="Vertical" Margin="8">
+                    <TextBlock Text="{Binding DayNumber}" 
+                               FontSize="{StaticResource FontXL}" 
+                               FontWeight="SemiBold"
+                               Foreground="{Binding DayNumberColor}"/>
+                    <Rectangle Height="1" Fill="{StaticResource DividerBrush}" Margin="0,6,0,6"/>
+
+                    <!-- Room Status Indicator -->
+                    <ItemsControl ItemsSource="{Binding Rooms}" Height="40">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding StatusColor}" Height="6" Margin="0,1" CornerRadius="2" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═════════════════════════════════════════════════════════ -->
+        <!--                      HEADER                              -->
+        <!-- ═════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="0" 
+                Background="#4A8150"
+                BorderBrush="{StaticResource DividerBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="40,24,40,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title & Logo -->
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="Assets/logo.png"
+                           Width="48" Height="48"
+                           Margin="0,0,12,0"
+                           Stretch="Uniform"
+                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock Text="Hotel Yncierto" Foreground="#D0A273" Style="{StaticResource Heading2}"/>
+                        <TextBlock Text="Room Availability Calendar" Foreground="white" Style="{StaticResource CaptionText}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Month Navigation Controls -->
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnPrevMonth" Content="‹ Previous" 
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="12,8" FontSize="{StaticResource FontMD}"
+                            Margin="0,0,8,0"
+                            Click="BtnPrevMonth_Click"/>
+                    <TextBlock x:Name="TxtCurrentMonth" 
+                               Text="October 2024"
+                               Foreground="white"
+                               Style="{StaticResource Heading3}"
+                               Margin="8,0"
+                               MinWidth="120"
+                               TextAlignment="Center"/>
+                    <Button x:Name="BtnNextMonth" Content="Next ›" 
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="12,8" FontSize="{StaticResource FontMD}"
+                            Margin="0,0,8,0"
+                            Click="BtnNextMonth_Click"/>
+                    <Button x:Name="BtnToday" Content="Today" 
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Padding="12,8" FontSize="{StaticResource FontMD}"
+                            Click="BtnToday_Click"/>
+                </StackPanel>
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnNewBooking" Content="✎ New Booking" 
+                            Style="{StaticResource AccentButtonStyle}"
+                            Padding="14,10,14,10" FontSize="{StaticResource FontMD}"
+                            Margin="0,0,12,0"
+                            Click="BtnNewBooking_Click"/>
+                    <Button x:Name="BtnExport" Content="⇩ Export" 
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="12,8" FontSize="{StaticResource FontMD}"
+                            Click="BtnExport_Click"/>
+                </StackPanel>
+
+                <!-- Filters & Legend -->
+                <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,16,0,0">
+                    <!-- Room Type Filter -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                        <TextBlock Text="Filter by Type:" FontWeight="SemiBold" Foreground="white" Margin="0,0,8,0"/>
+                        <ComboBox x:Name="CmbRoomType" 
+                                  Style="{StaticResource ModernComboBoxStyle}"
+                                  Width="120" Height="32"
+                                  SelectedIndex="0"
+                                  SelectionChanged="CmbRoomType_SelectionChanged">
+                            <ComboBoxItem>All Rooms</ComboBoxItem>
+                            <ComboBoxItem>Standard</ComboBoxItem>
+                            <ComboBoxItem>Deluxe</ComboBoxItem>
+                            <ComboBoxItem>Suite</ComboBoxItem>
+                            <ComboBoxItem>Family</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Statistics -->
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                            <Border Background="{StaticResource StatusAvailableBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
+                            <TextBlock Text="Available" Foreground="White" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtAvailCount" Text="0" FontWeight="Bold" Foreground="#C1E1C1"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                            <Border Background="{StaticResource StatusOccupiedBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
+                            <TextBlock Text="Occupied" Foreground="White" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtOccupiedCount" Text="0" FontWeight="Bold" Foreground="{StaticResource StatusOccupiedBrush}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Background="{StaticResource StatusUnavailableBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
+                            <TextBlock Text="Unavailable" Foreground="black" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtUnavailCount" Text="0" FontWeight="Bold" Foreground="Black"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ═════════════════════════════════════════════════════════ -->
+        <!--                    CALENDAR GRID                         -->
+        <!-- ═════════════════════════════════════════════════════════ -->
+        <Border Grid.Row="1" Padding="40,20,40,40" Background="#C1E1C1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Day-of-Week Headers -->
+                <Grid Grid.Row="0" Height="44" Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Sunday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="1" Text="Monday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="2" Text="Tuesday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="3" Text="Wednesday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="4" Text="Thursday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="5" Text="Friday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                    <TextBlock Grid.Column="6" Text="Saturday" Style="{StaticResource Heading3}" TextAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource GreenPrimaryBrush}"/>
+                </Grid>
+
+                <!-- Calendar Days Grid -->
+                <ItemsControl x:Name="CalendarDaysControl" 
+                              Grid.Row="1"
+                              ItemTemplate="{StaticResource CalendarDayTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="7" SnapsToDevicePixels="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

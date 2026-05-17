@@ -1,0 +1,212 @@
+<Page x:Class="calendarrrrrrrrrr.Views.CalendarView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      mc:Ignorable="d"
+      Title="Availability Calendar"
+      Background="Transparent">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Background="Transparent">
+
+        <StackPanel Margin="32,28,32,32">
+
+            <!-- Header with Title and Month Navigation -->
+            <Border Style="{StaticResource CardStyle}"
+                    Margin="0,0,0,24"
+                    Padding="24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Title -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Booking &amp; Availability Calendar"
+                                   Style="{StaticResource PageTitleStyle}"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock x:Name="TxtCurrentMonth"
+                                   Text="January 2025"
+                                   Style="{StaticResource CaptionStyle}"/>
+                    </StackPanel>
+
+                    <!-- Navigation Buttons -->
+                    <Button Grid.Column="1"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Padding="12,8"
+                            Margin="0,0,8,0"
+                            Click="BtnPrevMonth_Click"
+                            ToolTip="Previous Month">
+                        <iconPacks:PackIconMaterial Kind="ChevronLeft" Width="16" Height="16"/>
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Padding="12,8"
+                            Margin="0,0,8,0"
+                            Click="BtnToday_Click"
+                            ToolTip="Go to Today">
+                        <TextBlock Text="Today" FontSize="12"/>
+                    </Button>
+
+                    <Button Grid.Column="3"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Padding="12,8"
+                            Click="BtnNextMonth_Click"
+                            ToolTip="Next Month">
+                        <iconPacks:PackIconMaterial Kind="ChevronRight" Width="16" Height="16"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Status Legend -->
+            <Border Style="{StaticResource CardStyle}"
+                    Margin="0,0,0,24"
+                    Padding="24">
+                <StackPanel>
+                    <TextBlock Text="Room Status"
+                               Style="{StaticResource LabelStyle}"
+                               Margin="0,0,0,12"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Available -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,24,0">
+                            <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource StatusAvailableBrush}" Margin="0,2,8,0"/>
+                            <TextBlock Text="Available" Style="{StaticResource CaptionStyle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Occupied -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,24,0">
+                            <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource StatusOccupiedBrush}" Margin="0,2,8,0"/>
+                            <TextBlock Text="Occupied" Style="{StaticResource CaptionStyle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Cleaning -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,24,0">
+                            <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource StatusCleaningBrush}" Margin="0,2,8,0"/>
+                            <TextBlock Text="Cleaning" Style="{StaticResource CaptionStyle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Maintenance -->
+                        <StackPanel Grid.Column="3" Orientation="Horizontal">
+                            <Border Width="12" Height="12" CornerRadius="2" Background="{StaticResource StatusMaintenanceBrush}" Margin="0,2,8,0"/>
+                            <TextBlock Text="Maintenance" Style="{StaticResource CaptionStyle}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Calendar Grid -->
+            <Border Style="{StaticResource CardStyle}"
+                    Padding="24">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Day Headers (Mon-Sun) -->
+                    <Grid Grid.Row="0" Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Mon" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Tue" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="Wed" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="Thu" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="Fri" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="5" Text="Sat" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="6" Text="Sun" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Calendar Days Grid -->
+                    <ItemsControl x:Name="CalendarDaysControl"
+                                  Grid.Row="1">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="7" SnapsToDevicePixels="True"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding DayBackground}"
+                                        BorderBrush="{StaticResource DividerBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        Padding="8"
+                                        Margin="2"
+                                        MinHeight="100">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding DayNumber}"
+                                                   FontFamily="{StaticResource UIFont}"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{Binding DayNumberColor}"
+                                                   Margin="0,0,0,4"/>
+                                        <ItemsControl ItemsSource="{Binding Rooms}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{Binding StatusColor}"
+                                                            CornerRadius="2"
+                                                            Padding="3,2"
+                                                            ToolTip="{Binding ToolTip}"
+                                                            Margin="0,1">
+                                                        <TextBlock Text="{Binding RoomNumber}"
+                                                                   FontFamily="{StaticResource UIFont}"
+                                                                   FontSize="9"
+                                                                   Foreground="#FFFFFF"
+                                                                   HorizontalAlignment="Center"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+
+            <!-- New Booking Button -->
+            <Button Style="{StaticResource PrimaryButtonStyle}"
+                    Padding="20,12"
+                    Margin="0,24,0,0"
+                    Click="BtnNewBooking_Click"
+                    HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Plus" Width="16" Height="16" Margin="0,0,8,0"/>
+                    <TextBlock Text="New Booking"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</Page>
