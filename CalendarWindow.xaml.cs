@@ -6,10 +6,11 @@ using System.Windows;
 using System.Windows.Media;
 using calendarrrrrrrrrr.Data;
 using calendarrrrrrrrrr.Models;
+using HotelYnCierto;
 
 namespace calendarrrrrrrrrr
 {
-    public partial class MainWindow : Window
+    public partial class CalendarWindow : Window    
     {
         private DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         private string selectedRoomType = "All";
@@ -17,9 +18,11 @@ namespace calendarrrrrrrrrr
         private List<Room> allRooms = new();
         private List<Reservation> allReservations = new();
 
-        public MainWindow()
+        public CalendarWindow()
         {
             InitializeComponent();
+
+            DatabaseService.Initialize();
             InitializeCalendar();
         }
 
@@ -40,7 +43,11 @@ namespace calendarrrrrrrrrr
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading data: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading data: {ex.Message}",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
                 allRooms = new List<Room>();
                 allReservations = new List<Reservation>();
             }
@@ -53,13 +60,17 @@ namespace calendarrrrrrrrrr
 
             try
             {
+                LoadData();
+
                 var calendarDays = new ObservableCollection<CalendarDayViewModel>();
+
                 var firstDay = new DateTime(currentMonth.Year, currentMonth.Month, 1);
                 int daysInMonth = DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
                 int startDayOfWeek = (int)firstDay.DayOfWeek;
 
                 var previousMonth = firstDay.AddMonths(-1);
                 int daysInPreviousMonth = DateTime.DaysInMonth(previousMonth.Year, previousMonth.Month);
+
                 for (int i = startDayOfWeek - 1; i >= 0; i--)
                 {
                     int dayNumber = daysInPreviousMonth - i;
@@ -67,9 +78,11 @@ namespace calendarrrrrrrrrr
                     calendarDays.Add(CreatePaddingDay(date));
                 }
 
-                var filteredRooms = selectedRoomType == "All"
-                    ? allRooms
-                    : allRooms.Where(r => r.RoomType == selectedRoomType).ToList();
+                var filteredRooms = selectedRoomType == "All" || selectedRoomType == "All Rooms"
+                ? allRooms
+                : allRooms.Where(r =>
+                    r.RoomType.Contains(selectedRoomType)
+                  ).ToList();
 
                 for (int day = 1; day <= daysInMonth; day++)
                 {
@@ -89,6 +102,7 @@ namespace calendarrrrrrrrrr
 
                 var nextMonth = firstDay.AddMonths(1);
                 int trailingDays = (7 - (calendarDays.Count % 7)) % 7;
+
                 for (int day = 1; day <= trailingDays; day++)
                 {
                     var date = new DateTime(nextMonth.Year, nextMonth.Month, day);
@@ -96,16 +110,16 @@ namespace calendarrrrrrrrrr
                 }
 
                 CalendarDaysControl.ItemsSource = calendarDays;
-
-                // Update header
                 TxtCurrentMonth.Text = currentMonth.ToString("MMMM yyyy");
 
-                // Update statistics
                 UpdateStatistics(filteredRooms);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error refreshing calendar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error refreshing calendar: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -121,8 +135,7 @@ namespace calendarrrrrrrrrr
                     r.CheckOut.Date > date &&
                     r.Status != "Cancelled");
 
-                var status = reservation != null ? "Occupied" : room.Status;
-                var statusColor = GetStatusColor(status);
+                string status = reservation != null ? "Occupied" : room.Status;
 
                 roomStatuses.Add(new RoomStatusViewModel
                 {
@@ -130,7 +143,7 @@ namespace calendarrrrrrrrrr
                     RoomNumber = room.RoomNumber,
                     RoomType = room.RoomType,
                     Status = status,
-                    StatusColor = statusColor,
+                    StatusColor = GetStatusColor(status),
                     Reservation = reservation
                 });
             }
@@ -147,11 +160,12 @@ namespace calendarrrrrrrrrr
             int occupied = roomStatuses.Count(r => r.Status == "Occupied");
 
             if (occupied == 0)
-                return GetBrush("SurfaceElevatedBrush"); // Empty/Available
-            else if (available == 0)
-                return GetBrush("SurfaceBrush"); // Fully booked
-            else
-                return GetBrush("SurfaceElevatedBrush"); // Partially booked
+                return GetBrush("SurfaceElevatedBrush");
+
+            if (available == 0)
+                return GetBrush("SurfaceBrush");
+
+            return GetBrush("SurfaceElevatedBrush");
         }
 
         private Brush GetStatusColor(string status)
@@ -160,6 +174,7 @@ namespace calendarrrrrrrrrr
             {
                 "Available" => GetBrush("StatusAvailableBrush"),
                 "Occupied" => GetBrush("StatusOccupiedBrush"),
+                "Reserved" => GetBrush("StatusOccupiedBrush"),
                 "Cleaning" => GetBrush("WarningBrush"),
                 "Maintenance" => GetBrush("ErrorBrush"),
                 _ => GetBrush("StatusUnavailableBrush")
@@ -173,7 +188,10 @@ namespace calendarrrrrrrrrr
                 if (Application.Current.Resources[resourceKey] is Brush brush)
                     return brush;
             }
-            catch { }
+            catch
+            {
+            }
+
             return new SolidColorBrush(Colors.Gray);
         }
 
@@ -182,19 +200,21 @@ namespace calendarrrrrrrrrr
             var firstDay = new DateTime(currentMonth.Year, currentMonth.Month, 1);
             var lastDay = firstDay.AddMonths(1).AddDays(-1);
 
-            int availableCount = 0, occupiedCount = 0, unavailableCount = 0;
+            int availableCount = 0;
+            int occupiedCount = 0;
+            int unavailableCount = 0;
 
             foreach (var room in filteredRooms)
             {
-                var reservations = allReservations.Where(r =>
+                bool hasReservation = allReservations.Any(r =>
                     r.RoomId == room.RoomId &&
                     r.CheckIn.Date <= lastDay &&
                     r.CheckOut.Date >= firstDay &&
-                    r.Status != "Cancelled").ToList();
+                    r.Status != "Cancelled");
 
-                if (reservations.Count > 0)
+                if (hasReservation || room.Status == "Occupied" || room.Status == "Reserved")
                     occupiedCount++;
-                else if (room.Status == "Maintenance" || room.Status == "Cleaning")
+                else if (room.Status == "Maintenance" || room.Status == "Cleaning" || room.Status == "Unavailable")
                     unavailableCount++;
                 else
                     availableCount++;
@@ -205,9 +225,18 @@ namespace calendarrrrrrrrrr
             TxtUnavailCount.Text = unavailableCount.ToString();
         }
 
-        // ═════════════════════════════════════════════════════════
-        //                    EVENT HANDLERS
-        // ═════════════════════════════════════════════════════════
+        private CalendarDayViewModel CreatePaddingDay(DateTime date)
+        {
+            return new CalendarDayViewModel
+            {
+                Date = date,
+                DayNumber = "",
+                DayBackground = GetBrush("SurfaceBrush"),
+                DayNumberColor = GetBrush("TextTertiaryBrush"),
+                IsCurrentMonth = false,
+                Rooms = new ObservableCollection<RoomStatusViewModel>()
+            };
+        }
 
         private void BtnPrevMonth_Click(object sender, RoutedEventArgs e)
         {
@@ -239,35 +268,30 @@ namespace calendarrrrrrrrrr
             }
         }
 
-        private CalendarDayViewModel CreatePaddingDay(DateTime date)
-        {
-            return new CalendarDayViewModel
-            {
-                Date = date,
-                DayNumber = "",
-                DayBackground = GetBrush("SurfaceBrush"),
-                DayNumberColor = GetBrush("TextTertiaryBrush"),
-                IsCurrentMonth = false,
-                Rooms = new ObservableCollection<RoomStatusViewModel>()
-            };
-        }
-
         private void BtnNewBooking_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Redirection to reservations.",
-                "Feature Preview", MessageBoxButton.OK, MessageBoxImage.Information);
+            ReservationWindow reservationWindow = new ReservationWindow();
+            reservationWindow.ShowDialog();
+
+            RefreshCalendar();
         }
 
-        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        private void BtnAddRoom_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("This will export the calendar to Excel or PDF.",
-                "Feature Preview", MessageBoxButton.OK, MessageBoxImage.Information);
+            AddRoomWindow addRoomWindow = new AddRoomWindow();
+            addRoomWindow.ShowDialog();
+
+            RefreshCalendar();
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            Dashboard dashboard = new Dashboard();
+            dashboard.Show();
+
+            Close();
         }
     }
-
-    // ═════════════════════════════════════════════════════════
-    //                      VIEW MODELS
-    // ═════════════════════════════════════════════════════════
 
     public class CalendarDayViewModel
     {
@@ -279,7 +303,9 @@ namespace calendarrrrrrrrrr
         public ObservableCollection<RoomStatusViewModel> Rooms { get; set; } = new();
 
         public string DateDisplay => Date.ToString("ddd, MMM dd");
-        public string StatusSummary => $"{Rooms?.Count(r => r.Status == "Available") ?? 0} available, {Rooms?.Count(r => r.Status == "Occupied") ?? 0} occupied";
+
+        public string StatusSummary =>
+            $"{Rooms?.Count(r => r.Status == "Available") ?? 0} available, {Rooms?.Count(r => r.Status == "Occupied") ?? 0} occupied";
     }
 
     public class RoomStatusViewModel

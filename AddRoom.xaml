@@ -1,0 +1,234 @@
+﻿<Window x:Class="HotelYnCierto.AddRoomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Room"
+        Width="500"
+        Height="1000"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#C1E1C1">
+
+    <Window.Resources>
+
+        <!-- TEXT -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#2D2D2D"/>
+        </Style>
+
+        <!-- TEXTBOX -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="#ECEEE9"/>
+            <Setter Property="BorderBrush" Value="#D8DDD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- COMBOBOX -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="#ECEEE9"/>
+            <Setter Property="BorderBrush" Value="#D8DDD5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- BUTTON -->
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="22">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center">
+
+            <TextBlock Text="▣"
+                       FontSize="34"
+                       Foreground="#4A8150"
+                       Margin="0,0,10,0"/>
+
+            <TextBlock Text="Add Room"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="#4A8150"/>
+        </StackPanel>
+
+        <!-- MAIN CONTAINER -->
+        <Border Grid.Row="1"
+                Background="#4A8150"
+                Padding="18"
+                CornerRadius="8">
+
+            <!-- INNER FORM -->
+            <Border Background="#F8F8F6"
+                    CornerRadius="8"
+                    Padding="28">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- TITLE -->
+                    <TextBlock Text="Room Information"
+                               FontSize="25"
+                               FontWeight="Bold"
+                               Foreground="#4A8150"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                    <!-- ROOM NUMBER -->
+                    <StackPanel Grid.Row="1">
+
+                        <TextBlock Text="Room Number"
+                                   FontSize="12"/>
+
+                        <TextBox x:Name="txtRoomNumber"/>
+
+                    </StackPanel>
+
+                    <!-- ROOM TYPE -->
+                    <StackPanel Grid.Row="3">
+
+                        <TextBlock Text="Room Type"
+                                   FontSize="12"/>
+
+                        <ComboBox x:Name="cmbRoomType"
+                                  SelectedIndex="-1">
+
+                            <ComboBoxItem Content="Standard Room"/>
+                            <ComboBoxItem Content="Family Room"/>
+                            <ComboBoxItem Content="Deluxe Room"/>
+                            <ComboBoxItem Content="Suite Room"/>
+
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <!-- ROOM RATE -->
+                    <StackPanel Grid.Row="5">
+
+                        <TextBlock Text="Room Rate"
+                                   FontSize="12"/>
+
+                        <TextBox x:Name="txtRoomRate"/>
+
+                    </StackPanel>
+
+                    <!-- CAPACITY -->
+                    <StackPanel Grid.Row="7">
+
+                        <TextBlock Text="Capacity"
+                                   FontSize="12"/>
+
+                        <ComboBox x:Name="cmbCapacity"
+                                  SelectedIndex="-1">
+
+                            <ComboBoxItem Content="1 Person"/>
+                            <ComboBoxItem Content="2 Persons"/>
+                            <ComboBoxItem Content="3 Persons"/>
+                            <ComboBoxItem Content="4 Persons"/>
+                            <ComboBoxItem Content="5 Persons"/>
+
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <!-- STATUS -->
+                    <StackPanel Grid.Row="9">
+
+                        <TextBlock Text="Room Status"
+                                   FontSize="12"/>
+
+                        <ComboBox x:Name="cmbStatus"
+                                  SelectedIndex="-1">
+
+                            <ComboBoxItem Content="Available"/>
+                            <ComboBoxItem Content="Occupied"/>
+                            <ComboBoxItem Content="Unavailable"/>
+                            <ComboBoxItem Content="Maintenance"/>
+
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <!-- PHOTO -->
+                    <StackPanel Grid.Row="11">
+
+                        <TextBlock Text="Room Photo"
+                                   FontSize="12"
+                                   Margin="0,0,0,8"/>
+
+                        <Border Height="170"
+                                Background="#ECEEE9"
+                                BorderBrush="#D8DDD5"
+                                BorderThickness="1"
+                                CornerRadius="6">
+
+                            <Image x:Name="imgRoomPhoto"
+                                   Stretch="UniformToFill"/>
+
+                        </Border>
+
+                        <Button Content="Upload Photo"
+                                Width="130"
+                                Margin="0,12,0,0"
+                                Background="#4A8150"
+                                Click="BtnUploadPhoto_Click"/>
+
+                    </StackPanel>
+
+                    <!-- BUTTONS -->
+                    <Grid Grid.Row="13">
+
+                        <Button Content="Clear"
+                                Background="#D94B4B"
+                                HorizontalAlignment="Left"
+                                Click="BtnClear_Click"/>
+
+                        <Button Content="Save"
+                        Background="#4A8150"
+                        HorizontalAlignment="Right"
+                        Click="BtnSave_Click"/>
+
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </Border>
+
+    </Grid>
+
+</Window>

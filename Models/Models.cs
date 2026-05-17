@@ -9,13 +9,14 @@ namespace calendarrrrrrrrrr.Models
     {
         public int RoomId { get; set; }
         public string RoomNumber { get; set; } = string.Empty;
-        public string RoomType { get; set; } = string.Empty;       // Standard, Deluxe, Suite, Family
+        public string RoomType { get; set; } = string.Empty;
         public int Floor { get; set; }
         public int Capacity { get; set; }
         public decimal PricePerNight { get; set; }
-        public string Status { get; set; } = string.Empty;         // Available, Occupied, Cleaning, Maintenance, Reserved
+        public string Status { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Amenities { get; set; } = string.Empty;
+        public string PhotoPath { get; set; } = string.Empty;
 
         public override string ToString() => $"Room {RoomNumber} — {RoomType}";
     }

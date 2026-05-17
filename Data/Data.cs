@@ -66,7 +66,8 @@ namespace calendarrrrrrrrrr.Data
                     PricePerNight REAL NOT NULL DEFAULT 0,
                     Status TEXT NOT NULL DEFAULT 'Available',
                     Description TEXT,
-                    Amenities TEXT);",
+                    Amenities TEXT,
+                    PhotoPath TEXT);",
                 @"CREATE TABLE IF NOT EXISTS Guests (
                     GuestId INTEGER PRIMARY KEY AUTOINCREMENT,
                     FirstName TEXT NOT NULL,
@@ -130,43 +131,7 @@ namespace calendarrrrrrrrrr.Data
 
         private static void SeedData(SqliteConnection conn)
         {
-            // FIX: Changed SQLiteCommand to SqliteCommand
-            using (var cmd = new SqliteCommand("SELECT COUNT(*) FROM Rooms", conn))
-            {
-                long count = (long)cmd.ExecuteScalar();
-                if (count > 0) return;
-            }
-
-            var seed = @"
-                INSERT INTO Rooms (RoomNumber, RoomType, Floor, Capacity, PricePerNight, Status, Description, Amenities)
-                VALUES
-                ('101', 'Standard', 1, 2, 1500, 'Available', 'Cozy standard room with garden view', 'WiFi, AC, TV, Hot Shower'),
-                ('102', 'Standard', 1, 2, 1500, 'Available', 'Cozy standard room with garden view', 'WiFi, AC, TV, Hot Shower'),
-                ('103', 'Standard', 1, 2, 1500, 'Cleaning', 'Cozy standard room with garden view', 'WiFi, AC, TV, Hot Shower'),
-                ('104', 'Deluxe', 1, 3, 2500, 'Available', 'Spacious deluxe room with balcony', 'WiFi, AC, TV, Mini Bar, Hot Shower, Balcony'),
-                ('105', 'Deluxe', 1, 3, 2500, 'Maintenance', 'Spacious deluxe room with balcony', 'WiFi, AC, TV, Mini Bar, Hot Shower, Balcony'),
-                ('201', 'Standard', 2, 2, 1500, 'Available', 'Standard room on 2nd floor', 'WiFi, AC, TV, Hot Shower'),
-                ('202', 'Standard', 2, 2, 1500, 'Available', 'Standard room on 2nd floor', 'WiFi, AC, TV, Hot Shower'),
-                ('203', 'Deluxe', 2, 3, 2500, 'Available', 'Deluxe room with mountain view', 'WiFi, AC, TV, Mini Bar, Hot Shower, Balcony'),
-                ('204', 'Deluxe', 2, 3, 2500, 'Occupied', 'Deluxe room with mountain view', 'WiFi, AC, TV, Mini Bar, Hot Shower, Balcony'),
-                ('205', 'Suite', 2, 4, 4500, 'Available', 'Luxury suite with living area', 'WiFi, AC, TV, Mini Bar, Hot Shower, Living Room, Bathtub'),
-                ('301', 'Suite', 3, 4, 4500, 'Available', 'Premium suite with panoramic view', 'WiFi, AC, TV, Mini Bar, Hot Shower, Living Room, Bathtub, Jacuzzi'),
-                ('302', 'Family', 3, 6, 3500, 'Available', 'Spacious family room', 'WiFi, AC, TV, Hot Shower, Extra Beds'),
-                ('303', 'Family', 3, 6, 3500, 'Available', 'Spacious family room', 'WiFi, AC, TV, Hot Shower, Extra Beds');
-
-                INSERT INTO Users (Username, PasswordHash, FullName, Role, IsActive, CreatedAt)
-                VALUES ('admin', 'admin123', 'Administrator', 'Admin', 1, datetime('now'));
-
-                INSERT INTO Guests (FirstName, LastName, Email, Phone, Nationality, IdType, IdNumber, Address, CreatedAt)
-                VALUES
-                ('Maria', 'Santos', 'maria@email.com', '09171234567', 'Filipino', 'National ID', 'PH-001-001', 'Davao City', datetime('now')),
-                ('Juan', 'Dela Cruz', 'juan@email.com', '09181234567', 'Filipino', 'Passport', 'P123456A', 'Manila', datetime('now')),
-                ('Ana', 'Reyes', 'ana@email.com', '09191234567', 'Filipino', 'Driver''s License', 'DL-123456', 'Cebu City', datetime('now'));
-            ";
-
-            // FIX: Changed SQLiteCommand to SqliteCommand
-            using (var cmd = new SqliteCommand(seed, conn))
-                cmd.ExecuteNonQuery();
+            
         }
 
         // ═══════════════════════════════════════
@@ -222,9 +187,12 @@ namespace calendarrrrrrrrrr.Data
             using (var conn = new SqliteConnection(ConnectionString))
             {
                 conn.Open();
-                var sql = @"INSERT INTO Rooms (RoomNumber, RoomType, Floor, Capacity, PricePerNight, Status, Description, Amenities)
-                            VALUES (@Num, @Type, @Floor, @Cap, @Price, @Status, @Desc, @Amen)";
-                // FIX: Changed SQLiteCommand to SqliteCommand
+
+                var sql = @"INSERT INTO Rooms 
+                    (RoomNumber, RoomType, Floor, Capacity, PricePerNight, Status, Description, Amenities, PhotoPath)
+                    VALUES 
+                    (@Num, @Type, @Floor, @Cap, @Price, @Status, @Desc, @Amen, @Photo)";
+
                 using (var cmd = new SqliteCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Num", r.RoomNumber);
@@ -235,6 +203,7 @@ namespace calendarrrrrrrrrr.Data
                     cmd.Parameters.AddWithValue("@Status", r.Status);
                     cmd.Parameters.AddWithValue("@Desc", r.Description ?? "");
                     cmd.Parameters.AddWithValue("@Amen", r.Amenities ?? "");
+                    cmd.Parameters.AddWithValue("@Photo", r.PhotoPath ?? "");
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -762,7 +731,8 @@ namespace calendarrrrrrrrrr.Data
             PricePerNight = Convert.ToDecimal(r["PricePerNight"]),
             Status = r["Status"].ToString(),
             Description = r["Description"]?.ToString(),
-            Amenities = r["Amenities"]?.ToString()
+            Amenities = r["Amenities"]?.ToString(),
+            PhotoPath = r["PhotoPath"]?.ToString()
         };
 
         private static Guest MapGuest(SqliteDataReader r) => new Guest
