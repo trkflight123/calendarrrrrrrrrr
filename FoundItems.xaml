@@ -116,20 +116,20 @@
                               BorderThickness="0"
                               FontSize="15"
                               RowHeight="58"
-                              HeadersVisibility="Column">
+                              HeadersVisibility="Column" SelectionChanged="FoundItemsGrid_SelectionChanged">
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Room"
-                                                Binding="{Binding Room}"
-                                                Width="120"/>
+                        Binding="{Binding RoomNumber}"
+                        Width="120"/>
 
                             <DataGridTextColumn Header="Guest"
-                                                Binding="{Binding Guest}"
-                                                Width="*"/>
+                        Binding="{Binding GuestName}"
+                        Width="*"/>
 
                             <DataGridTextColumn Header="Item/s"
-                                                Binding="{Binding Item}"
-                                                Width="*"/>
+                        Binding="{Binding ItemName}"
+                        Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -139,7 +139,8 @@
                             Height="45"
                             Background="#F4B32F"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"/>
+                            VerticalAlignment="Bottom"
+                            Click="Claimed_Click"/> 
                 </Grid>
             </Border>
 
@@ -161,6 +162,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
@@ -171,8 +173,14 @@
                                    Foreground="#1B1F24"
                                    HorizontalAlignment="Center"/>
 
+                        <!-- ROOM -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,18">
+                            <TextBlock Text="Room"/>
+                            <TextBox x:Name="txtRoom"/>
+                        </StackPanel>
+
                         <!-- LAST NAME + MI -->
-                        <Grid Grid.Row="1" Margin="0,0,0,18">
+                        <Grid Grid.Row="2" Margin="0,0,0,18">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="25"/>
@@ -189,26 +197,26 @@
                                 <TextBox x:Name="txtMI"/>
                             </StackPanel>
                         </Grid>
-
-                        <StackPanel Grid.Row="2" Margin="0,0,0,18">
+                        
+                        <StackPanel Grid.Row="3" Margin="0,0,0,18">
                             <TextBlock Text="First Name"/>
                             <TextBox x:Name="txtFirstName"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="3" Margin="0,0,0,18">
+                        <StackPanel Grid.Row="4" Margin="0,0,0,18">
                             <TextBlock Text="Phone Number"/>
                             <TextBox x:Name="txtPhone"/>
                         </StackPanel>
 
                         <!-- DATES -->
-                        <Grid Grid.Row="4" Margin="0,0,0,18">
+                        <Grid Grid.Row="5" Margin="0,0,0,18">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="25"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel>
+                            <StackPanel> 
                                 <TextBlock Text="Check In Date"/>
                                 <DatePicker x:Name="dpCheckIn"/>
                             </StackPanel>
@@ -219,22 +227,24 @@
                             </StackPanel>
                         </Grid>
 
-                        <StackPanel Grid.Row="5">
+                        <StackPanel Grid.Row="7">
                             <TextBlock Text="Item/s Found"/>
                             <TextBox x:Name="txtItemsFound"/>
                         </StackPanel>
 
                         <!-- BUTTONS -->
-                        <Grid Grid.Row="7">
+                        <Grid Grid.Row="8">
                             <Button Content="Clear"
                                     Width="90"
                                     Background="#E23D45"
-                                    HorizontalAlignment="Left"/>
+                                    HorizontalAlignment="Left"
+                                    Click="Clear_Click"/>
 
-                            <Button Content="Update"
+                            <Button Content="Save"
                                     Width="100"
                                     Background="#5B5BEA"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Right"
+                                    Click="Save_Click"/>
                         </Grid>
                     </Grid>
                 </Border>

@@ -103,7 +103,7 @@ namespace calendarrrrrrrrrr
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Application.Current.Shutdown();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

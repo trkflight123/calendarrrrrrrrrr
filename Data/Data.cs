@@ -106,6 +106,13 @@ namespace calendarrrrrrrrrr.Data
                     CreatedAt TEXT NOT NULL,
                     FOREIGN KEY (GuestId) REFERENCES Guests(GuestId),
                     FOREIGN KEY (RoomId) REFERENCES Rooms(RoomId));",
+                @"CREATE TABLE IF NOT EXISTS FoundItems (
+                    FoundItemId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    RoomNumber TEXT NOT NULL,
+                    GuestName TEXT NOT NULL,
+                    ItemName TEXT NOT NULL,
+                    Status TEXT NOT NULL DEFAULT 'Unclaimed',
+                    CreatedAt TEXT NOT NULL);",
                 @"CREATE TABLE IF NOT EXISTS Payments (
                     PaymentId INTEGER PRIMARY KEY AUTOINCREMENT,
                     ReservationId INTEGER NOT NULL,
@@ -824,6 +831,84 @@ namespace calendarrrrrrrrrr.Data
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public static List<FoundItem> GetAllFoundItems()
+        {
+            EnsureInitialized();
+
+            var list = new List<FoundItem>();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand("SELECT * FROM FoundItems WHERE Status = 'Unclaimed' ORDER BY CreatedAt DESC", conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new FoundItem
+                        {
+                            FoundItemId = Convert.ToInt32(reader["FoundItemId"]),
+                            RoomNumber = reader["RoomNumber"].ToString(),
+                            GuestName = reader["GuestName"].ToString(),
+                            ItemName = reader["ItemName"].ToString(),
+                            Status = reader["Status"].ToString(),
+                            CreatedAt = DateTime.Parse(reader["CreatedAt"].ToString())
+                        });
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        // ═══════════════════════════════════════
+        //               ADD FOUNF ITEM
+        // ═══════════════════════════════════════
+        public static void AddFoundItem(FoundItem item)
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                var sql = @"INSERT INTO FoundItems
+                    (RoomNumber, GuestName, ItemName, Status, CreatedAt)
+                    VALUES
+                    (@Room, @Guest, @Item, @Status, @CreatedAt)";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Room", item.RoomNumber);
+                    cmd.Parameters.AddWithValue("@Guest", item.GuestName);
+                    cmd.Parameters.AddWithValue("@Item", item.ItemName);
+                    cmd.Parameters.AddWithValue("@Status", item.Status ?? "Unclaimed");
+                    cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void MarkFoundItemClaimed(int foundItemId)
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(
+                    "UPDATE FoundItems SET Status='Claimed' WHERE FoundItemId=@Id", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", foundItemId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
 
         // ═══════════════════════════════════════
         //               REPORTS DATA

@@ -211,24 +211,65 @@
 
                     <!-- ABOUT US -->
                     <Border Grid.Row="2"
-            Background="#4A8150"
-            CornerRadius="10"
-            Padding="28">
+        Background="#4A8150"
+        CornerRadius="10"
+        Padding="28">
 
-                        <StackPanel>
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- TITLE -->
                             <TextBlock Text="ⓘ About Us"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="White"/>
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="White"/>
 
-                            <TextBlock Text=""
-                       FontSize="15"
-                       Foreground="White"
-                       Margin="0,15,0,0"/>
-                        </StackPanel>
+                            <!-- SCROLLABLE CONTENT -->
+                            <ScrollViewer Grid.Row="1"
+                      Margin="0,18,0,0"
+                      VerticalScrollBarVisibility="Auto">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="Welcome to Hotel Yncierto, where comfort, elegance, and exceptional hospitality come together to create a memorable stay for every guest."
+                           TextWrapping="Wrap"
+                           FontSize="18"
+                           Foreground="White"
+                           LineHeight="30"
+                           Margin="0,0,0,18"/>
+
+                                    <TextBlock Text="Located in a relaxing and welcoming environment, Hotel Yncierto is dedicated to providing high-quality accommodations, excellent customer service, and a peaceful atmosphere suited for both leisure and business travelers."
+                           TextWrapping="Wrap"
+                           FontSize="18"
+                           Foreground="White"
+                           LineHeight="30"
+                           Margin="0,0,0,18"/>
+
+                                    <TextBlock Text="Our hotel offers comfortable rooms, reliable amenities, and personalized guest assistance to ensure every visitor experiences convenience, safety, and satisfaction throughout their stay."
+                           TextWrapping="Wrap"
+                           FontSize="18"
+                           Foreground="White"
+                           LineHeight="30"
+                           Margin="0,0,0,18"/>
+
+                                    <TextBlock Text="At Hotel Yncierto, we value professionalism, cleanliness, and genuine hospitality. We strive to make every guest feel at home while delivering a relaxing and enjoyable hotel experience."
+                           TextWrapping="Wrap"
+                           FontSize="18"
+                           Foreground="White"
+                           LineHeight="30"/>
+
+                                </StackPanel>
+                            </ScrollViewer>
+
+                        </Grid>
                     </Border>
                 </Grid>
-
+                
+                
                 <!-- RIGHT STATUS CARD -->
                 <Border Grid.Column="2"
                         Background="#4A8150"

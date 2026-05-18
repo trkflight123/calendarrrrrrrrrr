@@ -124,6 +124,21 @@ namespace calendarrrrrrrrrr.Models
     }
 
     // ═══════════════════════════════════════
+    //                 FOUND ITEM
+    // ═══════════════════════════════════════
+    public class FoundItem
+    {
+        public int FoundItemId { get; set; }
+        public string RoomNumber { get; set; } = string.Empty;
+        public string GuestName { get; set; } = string.Empty;
+        public string ItemName { get; set; } = string.Empty;
+        public string Status { get; set; } = "Unclaimed";
+        public DateTime CreatedAt { get; set; }
+
+        public string CreatedAtStr => CreatedAt.ToString("MMM dd, yyyy");
+    }
+
+    // ═══════════════════════════════════════
     //                 USER
     // ═══════════════════════════════════════
     public class User

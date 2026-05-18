@@ -115,11 +115,13 @@ Below are the details of your booking:
 
 Room Type: {roomType}
 Room Number: {roomNumber}
-Check-In Date: {checkIn:MMMM dd, yyyy}
-Check-Out Date: {checkOut:MMMM dd, yyyy}
+Check-In Date: {checkIn:MMMM dd, yyyy} at 3:00 PM
+Check-Out Date: {checkOut:MMMM dd, yyyy} at 10:00 AM
 Total Amount: ₱{totalAmount:N2}
 
 Please ensure that you bring a valid ID upon check-in for verification purposes. Our check-in staff will be available to assist you and make your stay as smooth as possible.
+
+Kindly note that standard check-in time starts at 3:00 PM, while check-out time is at 10:00 AM.
 
 If you have any special requests, questions, or need assistance before your arrival, please feel free to contact us. We will be more than happy to help.
 

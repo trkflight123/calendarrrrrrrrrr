@@ -57,13 +57,13 @@ namespace calendarrrrrrrrrr
                 LoadGuests();
             }
         }
-
+            
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.DataContext is Reservation reservation)
             {
-                MessageBox.Show(
-                $"Edit reservation for {reservation.GuestName}");
+                Edit editWindow = new Edit(reservation);
+                editWindow.ShowDialog();
 
                 LoadGuests();
             }
