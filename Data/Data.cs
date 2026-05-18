@@ -358,12 +358,16 @@ namespace calendarrrrrrrrrr.Data
             {
                 conn.Open();
                 var sql = @"
-                    SELECT r.*, g.FirstName || ' ' || g.LastName AS GuestName,
-                           rm.RoomNumber, rm.RoomType, rm.PricePerNight
-                    FROM Reservations r
-                    JOIN Guests g ON r.GuestId = g.GuestId
-                    JOIN Rooms rm ON r.RoomId = rm.RoomId
-                    ORDER BY r.CheckIn DESC";
+                            SELECT r.*, 
+                                   g.FirstName || ' ' || g.LastName AS GuestName,
+                                   g.Phone,
+                                   g.Email,
+                                   g.Address,
+                                   rm.RoomNumber
+                            FROM Reservations r
+                            JOIN Guests g ON r.GuestId = g.GuestId
+                            JOIN Rooms rm ON r.RoomId = rm.RoomId
+                            ORDER BY r.CheckIn DESC";
                 // FIX: Changed SQLiteCommand to SqliteCommand
                 using (var cmd = new SqliteCommand(sql, conn))
                 using (var reader = cmd.ExecuteReader())
@@ -759,8 +763,13 @@ namespace calendarrrrrrrrrr.Data
             Status = r["Status"].ToString(),
             TotalAmount = Convert.ToDecimal(r["TotalAmount"]),
             SpecialRequests = r["SpecialRequests"]?.ToString(),
+
             GuestName = r.HasColumn("GuestName") ? r["GuestName"].ToString() : "",
-            RoomNumber = r.HasColumn("RoomNumber") ? r["RoomNumber"].ToString() : ""
+            RoomNumber = r.HasColumn("RoomNumber") ? r["RoomNumber"].ToString() : "",
+
+            Phone = r.HasColumn("Phone") ? r["Phone"].ToString() : "",
+            Email = r.HasColumn("Email") ? r["Email"].ToString() : "",
+            Address = r.HasColumn("Address") ? r["Address"].ToString() : ""
         };
 
         private static Payment MapPayment(SqliteDataReader r) => new Payment

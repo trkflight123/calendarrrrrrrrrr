@@ -52,18 +52,24 @@ namespace calendarrrrrrrrrr.Models
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int GuestCount { get; set; }
-        public string Status { get; set; } = string.Empty;         // Pending, Confirmed, CheckedIn, CheckedOut, Cancelled
+        public string Status { get; set; } = string.Empty;
         public decimal TotalAmount { get; set; }
         public string SpecialRequests { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
 
-        // Navigation (joined from DB)
+        // Navigation
         public string GuestName { get; set; } = string.Empty;
         public string RoomNumber { get; set; } = string.Empty;
         public string RoomType { get; set; } = string.Empty;
         public decimal PricePerNight { get; set; }
 
+        // NEW
+        public string Phone { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+
         public int Nights => (CheckOut - CheckIn).Days;
+
         public string CheckInStr => CheckIn.ToString("MMM dd, yyyy");
         public string CheckOutStr => CheckOut.ToString("MMM dd, yyyy");
     }

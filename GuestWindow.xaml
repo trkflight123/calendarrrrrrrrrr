@@ -9,20 +9,17 @@
         ResizeMode="CanResize">
 
     <Grid Margin="30">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- TOP BAR -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- BACK BUTTON -->
             <Button Width="55"
                     Height="55"
                     Background="#4A8150"
@@ -32,7 +29,6 @@
                     FontWeight="Bold"
                     Cursor="Hand"
                     Click="Back_Click">
-
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -42,13 +38,11 @@
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
-
                 ←
             </Button>
 
-            <!-- TITLE -->
             <TextBlock Grid.Column="1"
-                       Text="Guest List"
+                       Text="Guest / Reservation List"
                        FontSize="36"
                        FontWeight="Bold"
                        Foreground="#4A8150"
@@ -56,7 +50,6 @@
                        Margin="20,0,0,0"/>
         </Grid>
 
-        <!-- TABLE -->
         <Border Grid.Row="1"
                 Background="#4A8150"
                 CornerRadius="15"
@@ -69,34 +62,48 @@
                       FontSize="15"
                       IsReadOnly="True"
                       CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="False"
+                      CanUserResizeColumns="False"
+                      CanUserReorderColumns="False"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
                       RowHeight="40"
                       HeadersVisibility="Column">
 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="Guest ID"
-                                        Binding="{Binding GuestId}"
-                                        Width="100"/>
+                    <DataGridTextColumn Header="Guest Name"
+                        Binding="{Binding GuestName}"
+                        Width="*"/>
 
-                    <DataGridTextColumn Header="First Name"
-                                        Binding="{Binding FirstName}"
-                                        Width="*"/>
-
-                    <DataGridTextColumn Header="Last Name"
-                                        Binding="{Binding LastName}"
-                                        Width="*"/>
-
-                    <DataGridTextColumn Header="Phone"
-                                        Binding="{Binding Phone}"
-                                        Width="*"/>
+                    <DataGridTextColumn Header="Phone Number"
+                        Binding="{Binding Phone}"
+                        Width="*"/>
 
                     <DataGridTextColumn Header="Email"
-                                        Binding="{Binding Email}"
-                                        Width="*"/>
+                        Binding="{Binding Email}"
+                        Width="*"/>
 
                     <DataGridTextColumn Header="Address"
-                                        Binding="{Binding Address}"
-                                        Width="2*"/>
+                        Binding="{Binding Address}"
+                        Width="*"/>
+
+                    <DataGridTextColumn Header="Room Number"
+                        Binding="{Binding RoomNumber}"
+                        Width="*"/>
+
+                    <DataGridTextColumn Header="Check In Date"
+                        Binding="{Binding CheckInStr}"
+                        Width="*"/>
+
+                    <DataGridTextColumn Header="Check Out Date"
+                        Binding="{Binding CheckOutStr}"
+                        Width="*"/>
+
+                    <DataGridTextColumn Header="Status"
+                        Binding="{Binding Status}"
+                        Width="*"/>
 
                 </DataGrid.Columns>
             </DataGrid>

@@ -15,7 +15,7 @@ namespace calendarrrrrrrrrr
 
         private void LoadGuests()
         {
-            GuestGrid.ItemsSource = DatabaseService.GetAllGuests();
+            GuestGrid.ItemsSource = DatabaseService.GetAllReservations();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -24,7 +24,6 @@ namespace calendarrrrrrrrrr
             dashboard.Show();
 
             Close();
-
         }
     }
-}
+}   
