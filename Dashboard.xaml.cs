@@ -99,8 +99,17 @@ namespace calendarrrrrrrrrr
             Close();
         }
 
+        
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            FoundItems foundItemsWindow = new FoundItems();
+            foundItemsWindow.Show();
             Close();
         }
     }

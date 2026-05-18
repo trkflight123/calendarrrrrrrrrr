@@ -75,13 +75,7 @@
                     Margin="0,0,0,14"
                     Click="Guest_Click"/>
 
-                    <Button Content="💳  Payments"
-                    Height="45"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Left"
-                    FontSize="14"
-                    Margin="0,0,0,35"/>
+                    
 
                     <TextBlock Text="Others"
                        FontWeight="Bold"
@@ -94,7 +88,7 @@
                     BorderThickness="0"
                     HorizontalContentAlignment="Left"
                     FontSize="14"
-                    Margin="0,0,0,14"/>
+                    Margin="0,0,0,14" Click="Button_Click"/>
 
                     <Button Content="🎉  Events"
                     Height="45"
