@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         Title="Reservation"
-        Icon="Assets/logo.png"
+       Icon="Assets/bookroom.png"
         Width="500"
-        Height="950"
+        Height="849"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#C1E1C1">
