@@ -1,16 +1,18 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using calendarrrrrrrrrr.Data;
+using System.Threading.Tasks;
 
 namespace calendarrrrrrrrrr
 {
     public partial class Dashboard : Window
     {
         private DispatcherTimer roomTimer;
+        private List<RoomCard> availableRooms = new();
+        private int currentRoomIndex = 0;
 
         public Dashboard()
         {
@@ -29,37 +31,50 @@ namespace calendarrrrrrrrrr
         {
             var rooms = DatabaseService.GetAllRooms();
 
-            RoomsList.ItemsSource = rooms.Select(r => new RoomCard
-            {
-                RoomName = $"Room {r.RoomNumber} - {r.RoomType}",
-                Capacity = $"Capacity: {r.Capacity} person(s)",
-                Status = $"Status: {r.Status}",
-                Price = $"₱{r.PricePerNight:N2} / night",
-                ImagePath = r.PhotoPath
-            }).ToList();
+            availableRooms = rooms
+                .Where(r => r.Status == "Available")
+                .Select(r => new RoomCard
+                {
+                    RoomName = $"Room {r.RoomNumber} - {r.RoomType}",
+                    RoomType = r.RoomType,
+                    Capacity = $"Occupancy: {r.Capacity} pax",
+                    Status = $"Availability: {r.Status}",
+                    Price = $"₱{r.PricePerNight:N2} / night",
+                    ImagePath = r.PhotoPath
+                })
+                .ToList();
+
+            currentRoomIndex = 0;
+            ShowCurrentRoom();
+
+            RoomStatusGrid.ItemsSource = availableRooms;
         }
 
-        private BitmapImage LoadImage(string path)
+        private void ShowCurrentRoom()
         {
-            MessageBox.Show(
-                $"PhotoPath: {path}\nExists: {File.Exists(path)}",
-                "Image Debug");
+            if (availableRooms.Count == 0)
+            {
+                RoomsList.ItemsSource = null;
+                return;
+            }
 
-            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
-                return null;
-
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(path, UriKind.Absolute);
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.EndInit();
-
-            return image;
+            RoomsList.ItemsSource = new List<RoomCard>
+            {
+                availableRooms[currentRoomIndex]
+            };
         }
 
         private void RoomTimer_Tick(object sender, EventArgs e)
         {
-            LoadRooms();
+            if (availableRooms.Count == 0)
+                return;
+
+            currentRoomIndex++;
+
+            if (currentRoomIndex >= availableRooms.Count)
+                currentRoomIndex = 0;
+
+            ShowCurrentRoom();
         }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e)
@@ -70,13 +85,18 @@ namespace calendarrrrrrrrrr
         private void Calendar_Click(object sender, RoutedEventArgs e)
         {
             CalendarWindow calendarWindow = new CalendarWindow();
+
             calendarWindow.Show();
+
             Close();
         }
 
         private void Guest_Click(object sender, RoutedEventArgs e)
         {
+            GuestWindow guestWindow = new GuestWindow();
+            guestWindow.Show();
 
+            Close();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -88,6 +108,7 @@ namespace calendarrrrrrrrrr
     public class RoomCard
     {
         public string RoomName { get; set; }
+        public string RoomType { get; set; }
         public string Capacity { get; set; }
         public string Status { get; set; }
         public string Price { get; set; }

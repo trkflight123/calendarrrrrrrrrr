@@ -1,0 +1,105 @@
+﻿<Window x:Class="calendarrrrrrrrrr.GuestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Guest List"
+        Width="1400"
+        Height="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#C1E1C1"
+        ResizeMode="CanResize">
+
+    <Grid Margin="30">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TOP BAR -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- BACK BUTTON -->
+            <Button Width="55"
+                    Height="55"
+                    Background="#4A8150"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Cursor="Hand"
+                    Click="Back_Click">
+
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+
+                ←
+            </Button>
+
+            <!-- TITLE -->
+            <TextBlock Grid.Column="1"
+                       Text="Guest List"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       Foreground="#4A8150"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"/>
+        </Grid>
+
+        <!-- TABLE -->
+        <Border Grid.Row="1"
+                Background="#4A8150"
+                CornerRadius="15"
+                Padding="25">
+
+            <DataGrid x:Name="GuestGrid"
+                      AutoGenerateColumns="False"
+                      Background="White"
+                      BorderThickness="0"
+                      FontSize="15"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      RowHeight="40"
+                      HeadersVisibility="Column">
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Guest ID"
+                                        Binding="{Binding GuestId}"
+                                        Width="100"/>
+
+                    <DataGridTextColumn Header="First Name"
+                                        Binding="{Binding FirstName}"
+                                        Width="*"/>
+
+                    <DataGridTextColumn Header="Last Name"
+                                        Binding="{Binding LastName}"
+                                        Width="*"/>
+
+                    <DataGridTextColumn Header="Phone"
+                                        Binding="{Binding Phone}"
+                                        Width="*"/>
+
+                    <DataGridTextColumn Header="Email"
+                                        Binding="{Binding Email}"
+                                        Width="*"/>
+
+                    <DataGridTextColumn Header="Address"
+                                        Binding="{Binding Address}"
+                                        Width="2*"/>
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Window>

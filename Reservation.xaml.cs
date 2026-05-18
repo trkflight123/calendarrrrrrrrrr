@@ -107,6 +107,8 @@ namespace HotelYnCierto
                     FirstName = txtFirstName.Text.Trim(),
                     LastName = txtLastName.Text.Trim(),
                     Phone = txtPhone.Text.Trim(),
+                    Email = txtEmail.Text.Trim(),
+                    Address = txtAddress.Text.Trim(),
                     CreatedAt = DateTime.Now
                 };
 

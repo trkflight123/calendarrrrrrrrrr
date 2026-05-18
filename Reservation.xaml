@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Reservation"
         Width="500"
-        Height="900"
+        Height="950"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#C1E1C1">
@@ -53,12 +53,13 @@
 
     <Grid Margin="22">
         <Grid.RowDefinitions>
-            <RowDefinition Height="85"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- HEADER -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Text="▣"
+            <TextBlock Text="📅"
                        FontSize="34"
                        Foreground="#4A8150"
                        Margin="0,0,10,0"/>
@@ -69,6 +70,7 @@
                        Foreground="#4A8150"/>
         </StackPanel>
 
+        <!-- MAIN CONTAINER -->
         <Border Grid.Row="1"
                 Background="#4A8150"
                 Padding="18"
@@ -78,130 +80,134 @@
                     CornerRadius="8"
                     Padding="28">
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="45"/>
-                    </Grid.RowDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                    <TextBlock Text="Reservation Form"
-                               FontSize="26"
-                               FontWeight="Bold"
-                               Foreground="#4A8150"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                    <StackPanel>
 
-                    <!-- LAST NAME + MI -->
-                    <Grid Grid.Row="1" Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="16"/>
-                            <ColumnDefinition Width="95"/>
-                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Reservation Form"
+                                   FontSize="26"
+                                   FontWeight="Bold"
+                                   Foreground="#4A8150"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,25"/>
 
-                        <StackPanel>
-                            <TextBlock Text="Last Name" FontSize="12"/>
-                            <TextBox x:Name="txtLastName"/>
+                        <!-- LAST NAME + MI -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="95"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="Last Name" FontSize="12"/>
+                                <TextBox x:Name="txtLastName"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="M.I." FontSize="12"/>
+                                <TextBox x:Name="txtMI"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- FIRST NAME -->
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Text="First Name" FontSize="12"/>
+                            <TextBox x:Name="txtFirstName"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="M.I." FontSize="12"/>
-                            <TextBox x:Name="txtMI"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- FIRST NAME -->
-                    <StackPanel Grid.Row="2" Margin="0,0,0,12">
-                        <TextBlock Text="First Name" FontSize="12"/>
-                        <TextBox x:Name="txtFirstName"/>
-                    </StackPanel>
-
-                    <!-- PHONE -->
-                    <StackPanel Grid.Row="3">
-                        <TextBlock Text="Phone Number" FontSize="12"/>
-                        <TextBox x:Name="txtPhone"/>
-                    </StackPanel>
-
-                    <!-- DATES -->
-                    <Grid Grid.Row="5" Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="18"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel>
-                            <TextBlock Text="Check In Date" FontSize="12"/>
-                            <DatePicker x:Name="dpCheckIn"
-                                        SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                        <!-- PHONE -->
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Text="Phone Number" FontSize="12"/>
+                            <TextBox x:Name="txtPhone"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Check Out Date" FontSize="12"/>
-                            <DatePicker x:Name="dpCheckOut"
-                                        SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                        <!-- EMAIL -->
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Text="Email Address" FontSize="12"/>
+                            <TextBox x:Name="txtEmail"/>
                         </StackPanel>
-                    </Grid>
 
-                    <!-- ROOM TYPE -->
-                    <StackPanel Grid.Row="7" Margin="0,0,0,12">
-                        <TextBlock Text="Room Type" FontSize="12"/>
-                        <ComboBox x:Name="cmbRoomType"
-                                  SelectedIndex="-1"
-                                  SelectionChanged="cmbRoomType_SelectionChanged">
-                            <ComboBoxItem Content="Standard"/>
-                            <ComboBoxItem Content="Family"/>
-                            <ComboBoxItem Content="Deluxe"/>
-                            <ComboBoxItem Content="Suite"/>
-                        </ComboBox>
-                    </StackPanel>
+                        <!-- ADDRESS -->
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Text="Address" FontSize="12"/>
+                            <TextBox x:Name="txtAddress"/>
+                        </StackPanel>
 
-                    <!-- ROOM AVAILABLE + RATE -->
-                    <Grid Grid.Row="9">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="18"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- DATES -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="18"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <StackPanel>
-                            <TextBlock Text="Room Available" FontSize="12"/>
-                            <ComboBox x:Name="cmbAvailable"
+                            <StackPanel>
+                                <TextBlock Text="Check In Date" FontSize="12"/>
+                                <DatePicker x:Name="dpCheckIn"
+                                            SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Check Out Date" FontSize="12"/>
+                                <DatePicker x:Name="dpCheckOut"
+                                            SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- ROOM TYPE -->
+                        <StackPanel Margin="0,0,0,12">
+                            <TextBlock Text="Room Type" FontSize="12"/>
+                            <ComboBox x:Name="cmbRoomType"
                                       SelectedIndex="-1"
-                                      DisplayMemberPath="RoomNumber"
-                                      SelectionChanged="cmbAvailable_SelectionChanged"/>
+                                      SelectionChanged="cmbRoomType_SelectionChanged">
+                                <ComboBoxItem Content="Standard"/>
+                                <ComboBoxItem Content="Family"/>
+                                <ComboBoxItem Content="Deluxe"/>
+                                <ComboBoxItem Content="Suite"/>
+                            </ComboBox>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Room Rate" FontSize="12"/>
-                            <TextBox x:Name="txtRoomRate"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
-                    </Grid>
+                        <!-- ROOM AVAILABLE + RATE -->
+                        <Grid Margin="0,0,0,25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="18"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                    <!-- BUTTONS -->
-                    <Grid Grid.Row="11">
-                        <Button Content="Clear"
-                                Background="#D94B4B"
-                                HorizontalAlignment="Left"
-                                Click="BtnClear_Click"/>
+                            <StackPanel>
+                                <TextBlock Text="Room Available" FontSize="12"/>
+                                <ComboBox x:Name="cmbAvailable"
+                                          SelectedIndex="-1"
+                                          DisplayMemberPath="RoomNumber"
+                                          SelectionChanged="cmbAvailable_SelectionChanged"/>
+                            </StackPanel>
 
-                        <Button Content="Book"
-                                Background="#4A8150"
-                                HorizontalAlignment="Right"
-                                Click="BtnBook_Click"/>
-                    </Grid>
-                </Grid>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Room Rate" FontSize="12"/>
+                                <TextBox x:Name="txtRoomRate"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- BUTTONS -->
+                        <Grid>
+                            <Button Content="Clear"
+                                    Background="#D94B4B"
+                                    HorizontalAlignment="Left"
+                                    Click="BtnClear_Click"/>
+
+                            <Button Content="Book"
+                                    Background="#4A8150"
+                                    HorizontalAlignment="Right"
+                                    Click="BtnBook_Click"/>
+                        </Grid>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
             </Border>
         </Border>
     </Grid>
