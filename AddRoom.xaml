@@ -80,9 +80,7 @@
                         <TextBlock Text="Room Type" FontSize="12"/>
                         <ComboBox x:Name="cmbRoomType" SelectedIndex="-1" Margin="0,3,0,12">
                             <ComboBoxItem Content="Standard Room"/>
-                            <ComboBoxItem Content="Family Room"/>
                             <ComboBoxItem Content="Deluxe Room"/>
-                            <ComboBoxItem Content="Suite Room"/>
                         </ComboBox>
 
                         <TextBlock Text="Room Rate" FontSize="12"/>

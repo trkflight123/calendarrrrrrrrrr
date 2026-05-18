@@ -112,6 +112,18 @@ namespace calendarrrrrrrrrr.Models
     }
 
     // ═══════════════════════════════════════
+    //      DAY AVAILABILITY OVERRIDE
+    // ═══════════════════════════════════════
+    public class DayAvailabilityOverride
+    {
+        public int OverrideId { get; set; }
+        public DateTime Date { get; set; }
+        public string RoomTypeFilter { get; set; } = "All";
+        public int AvailableCount { get; set; }
+        public int? OccupiedCount { get; set; }
+    }
+
+    // ═══════════════════════════════════════
     //                 USER
     // ═══════════════════════════════════════
     public class User

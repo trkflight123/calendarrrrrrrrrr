@@ -33,8 +33,22 @@ namespace calendarrrrrrrrrr.Data
                     CreateTables(conn);
                     SeedData(conn);
                 }
+                EnsureDayOverrideTable(conn);
             }
             _initialized = true;
+        }
+
+        private static void EnsureDayOverrideTable(SqliteConnection conn)
+        {
+            using var cmd = new SqliteCommand(
+                @"CREATE TABLE IF NOT EXISTS DayAvailabilityOverrides (
+                    OverrideId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    OverrideDate TEXT NOT NULL,
+                    RoomTypeFilter TEXT NOT NULL DEFAULT 'All',
+                    AvailableCount INTEGER NOT NULL,
+                    OccupiedCount INTEGER,
+                    UNIQUE(OverrideDate, RoomTypeFilter));", conn);
+            cmd.ExecuteNonQuery();
         }
 
         private static void EnsureInitialized()
@@ -119,7 +133,14 @@ namespace calendarrrrrrrrrr.Data
                     FullName TEXT NOT NULL,
                     Role TEXT NOT NULL DEFAULT 'Receptionist',
                     IsActive INTEGER NOT NULL DEFAULT 1,
-                    CreatedAt TEXT NOT NULL);"
+                    CreatedAt TEXT NOT NULL);",
+                @"CREATE TABLE IF NOT EXISTS DayAvailabilityOverrides (
+                    OverrideId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    OverrideDate TEXT NOT NULL,
+                    RoomTypeFilter TEXT NOT NULL DEFAULT 'All',
+                    AvailableCount INTEGER NOT NULL,
+                    OccupiedCount INTEGER,
+                    UNIQUE(OverrideDate, RoomTypeFilter));"
             };
 
             foreach (var sql in statements)
@@ -249,17 +270,57 @@ namespace calendarrrrrrrrrr.Data
             }
         }
 
-        public static void DeleteRoom(int roomId)
+        public static bool TryDeleteRoom(int roomId, out string errorMessage)
         {
-            using (var conn = new SqliteConnection(ConnectionString))
+            EnsureInitialized();
+            errorMessage = string.Empty;
+
+            try
             {
-                conn.Open();
-                // FIX: Changed SQLiteCommand to SqliteCommand
-                using (var cmd = new SqliteCommand("DELETE FROM Rooms WHERE RoomId=@Id", conn))
+                using (var conn = new SqliteConnection(ConnectionString))
                 {
-                    cmd.Parameters.AddWithValue("@Id", roomId);
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+                    using var transaction = conn.BeginTransaction();
+
+                    using (var activeCmd = new SqliteCommand(
+                        @"SELECT COUNT(*) FROM Reservations
+                          WHERE RoomId = @Id AND Status NOT IN ('Cancelled', 'CheckedOut')
+                            AND date(CheckOut) > date('now')", conn, transaction))
+                    {
+                        activeCmd.Parameters.AddWithValue("@Id", roomId);
+                        var activeCount = Convert.ToInt32(activeCmd.ExecuteScalar());
+                        if (activeCount > 0)
+                        {
+                            errorMessage = "This room still has active or upcoming bookings. Clear or cancel them first.";
+                            return false;
+                        }
+                    }
+
+                    string[] cleanupStatements =
+                    {
+                        @"DELETE FROM Payments WHERE ReservationId IN
+                          (SELECT ReservationId FROM Reservations WHERE RoomId = @Id)",
+                        "DELETE FROM Reservations WHERE RoomId = @Id",
+                        "DELETE FROM HousekeepingTasks WHERE RoomId = @Id",
+                        "DELETE FROM Rooms WHERE RoomId = @Id"
+                    };
+
+                    foreach (var sql in cleanupStatements)
+                    {
+                        using var cmd = new SqliteCommand(sql, conn, transaction);
+                        cmd.Parameters.AddWithValue("@Id", roomId);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
                 }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
             }
         }
 
@@ -677,6 +738,94 @@ namespace calendarrrrrrrrrr.Data
         }
 
         // ═══════════════════════════════════════
+        //        DAY AVAILABILITY OVERRIDES
+        // ═══════════════════════════════════════
+
+        public static Dictionary<DateTime, DayAvailabilityOverride> GetDayOverridesForMonth(
+            int year, int month, string roomTypeFilter)
+        {
+            EnsureInitialized();
+            var result = new Dictionary<DateTime, DayAvailabilityOverride>();
+            var start = new DateTime(year, month, 1);
+            var end = start.AddMonths(1);
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                var sql = @"SELECT * FROM DayAvailabilityOverrides
+                            WHERE RoomTypeFilter = @Filter
+                              AND date(OverrideDate) >= date(@Start)
+                              AND date(OverrideDate) < date(@End)";
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Filter", roomTypeFilter);
+                cmd.Parameters.AddWithValue("@Start", start.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@End", end.ToString("yyyy-MM-dd"));
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var ovr = MapDayOverride(reader);
+                    result[ovr.Date.Date] = ovr;
+                }
+            }
+
+            return result;
+        }
+
+        public static DayAvailabilityOverride GetDayOverride(DateTime date, string roomTypeFilter)
+        {
+            EnsureInitialized();
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                var sql = @"SELECT * FROM DayAvailabilityOverrides
+                            WHERE date(OverrideDate) = date(@Date) AND RoomTypeFilter = @Filter";
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Date", date.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@Filter", roomTypeFilter);
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                    return MapDayOverride(reader);
+            }
+
+            return null;
+        }
+
+        public static void SetDayOverride(DateTime date, string roomTypeFilter, int availableCount, int? occupiedCount)
+        {
+            EnsureInitialized();
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                var sql = @"INSERT INTO DayAvailabilityOverrides (OverrideDate, RoomTypeFilter, AvailableCount, OccupiedCount)
+                            VALUES (@Date, @Filter, @Avail, @Occ)
+                            ON CONFLICT(OverrideDate, RoomTypeFilter) DO UPDATE SET
+                                AvailableCount = @Avail,
+                                OccupiedCount = @Occ";
+                using var cmd = new SqliteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@Date", date.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@Filter", roomTypeFilter);
+                cmd.Parameters.AddWithValue("@Avail", availableCount);
+                cmd.Parameters.AddWithValue("@Occ", occupiedCount.HasValue ? (object)occupiedCount.Value : DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void ClearDayOverride(DateTime date, string roomTypeFilter)
+        {
+            EnsureInitialized();
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+                using var cmd = new SqliteCommand(
+                    "DELETE FROM DayAvailabilityOverrides WHERE date(OverrideDate) = date(@Date) AND RoomTypeFilter = @Filter",
+                    conn);
+                cmd.Parameters.AddWithValue("@Date", date.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@Filter", roomTypeFilter);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // ═══════════════════════════════════════
         //               REPORTS DATA
         // ═══════════════════════════════════════
 
@@ -797,6 +946,17 @@ namespace calendarrrrrrrrrr.Data
             CompletedAt = r["CompletedAt"] != DBNull.Value ? DateTime.Parse(r["CompletedAt"].ToString()) : (DateTime?)null,
             Notes = r["Notes"]?.ToString(),
             RoomNumber = r.HasColumn("RoomNumber") ? r["RoomNumber"].ToString() : ""
+        };
+
+        private static DayAvailabilityOverride MapDayOverride(SqliteDataReader r) => new DayAvailabilityOverride
+        {
+            OverrideId = Convert.ToInt32(r["OverrideId"]),
+            Date = DateTime.Parse(r["OverrideDate"].ToString()),
+            RoomTypeFilter = r["RoomTypeFilter"].ToString(),
+            AvailableCount = Convert.ToInt32(r["AvailableCount"]),
+            OccupiedCount = r["OccupiedCount"] != DBNull.Value
+                ? Convert.ToInt32(r["OccupiedCount"])
+                : (int?)null
         };
     }
 

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Hotel Yncierto — Availability Calendar"
         Icon="Assets/logo.png"
@@ -16,37 +17,78 @@
         FontSize="{StaticResource FontMD}">
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
         <!-- Calendar Day Template -->
         <DataTemplate x:Key="CalendarDayTemplate">
             <Border Background="{Binding DayBackground}"
-                    BorderBrush="{StaticResource DividerBrush}"
-                    BorderThickness="1"
+                    BorderBrush="{Binding StatusBorderBrush}"
+                    BorderThickness="{Binding StatusBorderThickness}"
                     CornerRadius="{StaticResource CornerRadiusMD}"
-                    Margin="6"
-                    Cursor="Hand">
+                    Margin="3"
+                    MinHeight="96"
+                    MinWidth="72"
+                    ClipToBounds="True"
+                    Cursor="{Binding DayCursor}"
+                    MouseLeftButtonUp="DayCell_MouseLeftButtonUp">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsCurrentMonth}" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#40000000" BlurRadius="6" ShadowDepth="1" Opacity="0.15"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <Border.ToolTip>
                     <StackPanel Orientation="Vertical" Margin="0">
                         <TextBlock Text="{Binding DateDisplay}" FontWeight="Bold" FontSize="{StaticResource FontMD}"/>
-                        <TextBlock Text="{Binding StatusSummary}" FontSize="{StaticResource FontSM}"/>
+                        <TextBlock Text="{Binding StatusSummary}" FontSize="{StaticResource FontSM}"
+                                   Visibility="{Binding ShowDayStatus, Converter={StaticResource BoolToVis}}"/>
+                        <TextBlock Text="Click to view or update rooms" FontSize="{StaticResource FontSM}" Margin="0,4,0,0"
+                                   Visibility="{Binding ShowDayStatus, Converter={StaticResource BoolToVis}}"/>
                     </StackPanel>
                 </Border.ToolTip>
 
-                <StackPanel Orientation="Vertical" Margin="8">
-                    <TextBlock Text="{Binding DayNumber}" 
-                               FontSize="{StaticResource FontXL}" 
+                <Grid Margin="5,5,5,4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding DayNumber}" 
+                               FontSize="16"
                                FontWeight="SemiBold"
                                Foreground="{Binding DayNumberColor}"/>
-                    <Rectangle Height="1" Fill="{StaticResource DividerBrush}" Margin="0,6,0,6"/>
 
-                    <!-- Room Status Indicator -->
-                    <ItemsControl ItemsSource="{Binding Rooms}" Height="40">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{Binding StatusColor}" Height="6" Margin="0,1" CornerRadius="2" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                    <Rectangle Grid.Row="1" Height="1" Fill="{StaticResource DividerBrush}" Margin="0,4,0,4"
+                               Visibility="{Binding ShowDayStatus, Converter={StaticResource BoolToVis}}"/>
+
+                    <TextBlock Grid.Row="2"
+                               Text="{Binding DayStatusLine}"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Top"
+                               Visibility="{Binding ShowDayStatus, Converter={StaticResource BoolToVis}}"/>
+
+                    <Border Grid.Row="3"
+                            Height="4"
+                            CornerRadius="2"
+                            Margin="0,4,0,0"
+                            VerticalAlignment="Bottom"
+                            Background="{Binding StatusStripBrush}"
+                            Visibility="{Binding ShowDayStatus, Converter={StaticResource BoolToVis}}"/>
+                </Grid>
             </Border>
         </DataTemplate>
     </Window.Resources>
@@ -173,20 +215,45 @@
 
                 <!-- Action Buttons -->
                 <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button x:Name="BtnNewBooking" Content="✎ New Booking" 
+                    <Button x:Name="BtnNewBooking"
                             Style="{StaticResource AccentButtonStyle}"
                             Padding="14,10,14,10" FontSize="{StaticResource FontMD}"
                             Margin="0,0,12,0"
-                            Click="BtnNewBooking_Click"/>
-                    <Button x:Name="BtnAddRoom" Content="+ Add Room" 
-                    Style="{StaticResource SecondaryButtonStyle}"
-                    Padding="12,8"
-                    FontSize="{StaticResource FontMD}"
-                    Click="BtnAddRoom_Click"/>
+                            Click="BtnNewBooking_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="BookPlus" Width="16" Height="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="New Booking"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="BtnManageRooms"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="12,8"
+                            FontSize="{StaticResource FontMD}"
+                            Margin="0,0,12,0"
+                            Click="BtnManageRooms_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="BedDouble" Width="16" Height="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="Manage Rooms"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="BtnAddRoom"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Padding="12,8"
+                            FontSize="{StaticResource FontMD}"
+                            Click="BtnAddRoom_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="PlusCircleOutline" Width="16" Height="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="Add Room"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <!-- Filters & Legend -->
-                <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,16,0,0">
+                <ScrollViewer Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+                              Margin="0,16,0,0"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal">
                     <!-- Room Type Filter -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
                         <TextBlock Text="Filter by Type:" FontWeight="SemiBold" Foreground="white" Margin="0,0,8,0"/>
@@ -198,30 +265,39 @@
                             <ComboBoxItem>All Rooms</ComboBoxItem>
                             <ComboBoxItem>Standard</ComboBoxItem>
                             <ComboBoxItem>Deluxe</ComboBoxItem>
-                            <ComboBoxItem>Suite</ComboBoxItem>
-                            <ComboBoxItem>Family</ComboBoxItem>
                         </ComboBox>
+                    </StackPanel>
+
+                    <!-- Day color legend -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                        <Border Width="14" Height="14" CornerRadius="2" Background="#649C6D" BorderBrush="#4A7A52" BorderThickness="2,0,0,0" Margin="0,0,6,0"/>
+                        <TextBlock Text="All open" Foreground="White" FontSize="11" Margin="0,0,14,0"/>
+                        <Border Width="14" Height="14" CornerRadius="2" Background="#E7C597" BorderBrush="#C9A86E" BorderThickness="2,0,0,0" Margin="0,0,6,0"/>
+                        <TextBlock Text="Mixed" Foreground="White" FontSize="11" Margin="0,0,14,0"/>
+                        <Border Width="14" Height="14" CornerRadius="2" Background="#D96B3B" BorderBrush="#B85530" BorderThickness="2,0,0,0" Margin="0,0,6,0"/>
+                        <TextBlock Text="Fully booked" Foreground="White" FontSize="11" Margin="0,0,14,0"/>
                     </StackPanel>
 
                     <!-- Statistics -->
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
                             <Border Background="{StaticResource StatusAvailableBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="Available" Foreground="White" Margin="0,0,6,0"/>
+                            <TextBlock Text="Open today" Foreground="White" Margin="0,0,6,0"/>
                             <TextBlock x:Name="TxtAvailCount" Text="0" FontWeight="Bold" Foreground="#C1E1C1"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
                             <Border Background="{StaticResource StatusOccupiedBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="Occupied" Foreground="White" Margin="0,0,6,0"/>
+                            <TextBlock Text="Booked today" Foreground="White" Margin="0,0,6,0"/>
                             <TextBlock x:Name="TxtOccupiedCount" Text="0" FontWeight="Bold" Foreground="{StaticResource StatusOccupiedBrush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Background="{StaticResource StatusUnavailableBrush}" Width="12" Height="12" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="Unavailable" Foreground="black" Margin="0,0,6,0"/>
+                            <TextBlock Text="Out of service" Foreground="black" Margin="0,0,6,0"/>
                             <TextBlock x:Name="TxtUnavailCount" Text="0" FontWeight="Bold" Foreground="Black"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Border>
 

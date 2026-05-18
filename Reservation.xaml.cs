@@ -8,6 +8,7 @@ using calendarrrrrrrrrr.Models;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Windows.Media.Imaging;
 
 namespace HotelYnCierto
 {
@@ -18,9 +19,72 @@ namespace HotelYnCierto
         public ReservationWindow()
         {
             InitializeComponent();
-
+            SetWindowIcon();
             DatabaseService.Initialize();
             LoadAvailableRooms();
+        }
+
+        public ReservationWindow(DateTime checkInDate, string roomNumber)
+        {
+            InitializeComponent();
+            SetWindowIcon();
+            DatabaseService.Initialize();
+
+            dpCheckIn.SelectedDate = checkInDate;
+            dpCheckOut.SelectedDate = checkInDate.AddDays(1);
+
+            if (!string.IsNullOrWhiteSpace(roomNumber))
+                PrefillRoom(roomNumber.Trim());
+            else
+                LoadAvailableRooms();
+        }
+
+        private void PrefillRoom(string roomNumber)
+        {
+            var room = DatabaseService.GetAllRooms()
+                .FirstOrDefault(r => string.Equals(r.RoomNumber, roomNumber, StringComparison.OrdinalIgnoreCase));
+
+            if (room == null)
+            {
+                MessageBox.Show($"Room {roomNumber} was not found.", "Room not found",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadAvailableRooms();
+                return;
+            }
+
+            SelectRoomTypeForRoom(room);
+            LoadAvailableRooms();
+
+            var match = availableRooms.FirstOrDefault(r =>
+                string.Equals(r.RoomNumber, roomNumber, StringComparison.OrdinalIgnoreCase));
+
+            if (match != null)
+            {
+                cmbAvailable.SelectedItem = match;
+                txtRoomRate.Text = match.PricePerNight.ToString("₱#,##0.00");
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"Room {roomNumber} is not available for the selected dates. Choose different dates or another room.",
+                    "Room unavailable",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+        }
+
+        private void SelectRoomTypeForRoom(Room room)
+        {
+            foreach (ComboBoxItem item in cmbRoomType.Items)
+            {
+                var type = item.Content?.ToString() ?? string.Empty;
+                if (!string.IsNullOrEmpty(type) &&
+                    room.RoomType.Contains(type, StringComparison.OrdinalIgnoreCase))
+                {
+                    cmbRoomType.SelectedItem = item;
+                    return;
+                }
+            }
         }
 
         private void SendConfirmationEmail(
@@ -71,6 +135,17 @@ Reservations Team";
             smtp.EnableSsl = true;
 
             smtp.Send(mail);
+        }
+
+        private void SetWindowIcon()
+        {
+            try
+            {
+                Icon = new BitmapImage(new Uri("pack://application:,,,/Assets/logo.png", UriKind.Absolute));
+            }
+            catch
+            {
+            }
         }
 
         private void LoadAvailableRooms()
