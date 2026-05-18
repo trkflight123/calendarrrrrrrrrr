@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using calendarrrrrrrrrr.Data;
 using calendarrrrrrrrrr.Models;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 
 namespace HotelYnCierto
 {
@@ -19,6 +21,56 @@ namespace HotelYnCierto
 
             DatabaseService.Initialize();
             LoadAvailableRooms();
+        }
+
+        private void SendConfirmationEmail(
+                string customerEmail,
+                string customerName,
+                string roomNumber,
+                string roomType,
+                DateTime checkIn,
+                DateTime checkOut,
+                decimal totalAmount)
+                    {
+                        string senderEmail = "k.karldonayre05@gmail.com";
+                        string appPassword = "qczs hacb idho rfru";
+
+                        MailMessage mail = new MailMessage();
+                        mail.From = new MailAddress(senderEmail, "Hotel Yncierto");
+                        mail.To.Add(customerEmail);
+                        mail.Subject = "Hotel Yncierto Booking Confirmation";
+
+            mail.Body =
+$@"Dear {customerName},
+
+Greetings from Hotel Yncierto!
+
+We are pleased to inform you that your room reservation has been successfully confirmed. Thank you for choosing to stay with us. We truly appreciate your trust and look forward to providing you with a comfortable and enjoyable experience during your visit.
+
+Below are the details of your booking:
+
+Room Type: {roomType}
+Room Number: {roomNumber}
+Check-In Date: {checkIn:MMMM dd, yyyy}
+Check-Out Date: {checkOut:MMMM dd, yyyy}
+Total Amount: ₱{totalAmount:N2}
+
+Please ensure that you bring a valid ID upon check-in for verification purposes. Our check-in staff will be available to assist you and make your stay as smooth as possible.
+
+If you have any special requests, questions, or need assistance before your arrival, please feel free to contact us. We will be more than happy to help.
+
+Thank you once again for choosing Hotel Yncierto. We are excited to welcome you and hope you have a pleasant and relaxing stay with us.
+
+Best regards,
+
+Hotel Yncierto
+Reservations Team";
+
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential(senderEmail, appPassword);
+            smtp.EnableSsl = true;
+
+            smtp.Send(mail);
         }
 
         private void LoadAvailableRooms()
@@ -73,6 +125,7 @@ namespace HotelYnCierto
                 if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
                     string.IsNullOrWhiteSpace(txtLastName.Text) ||
                     string.IsNullOrWhiteSpace(txtPhone.Text) ||
+                    string.IsNullOrWhiteSpace(txtEmail.Text) ||
                     !dpCheckIn.SelectedDate.HasValue ||
                     !dpCheckOut.SelectedDate.HasValue ||
                     cmbRoomType.SelectedItem == null ||
@@ -130,7 +183,24 @@ namespace HotelYnCierto
 
                 DatabaseService.AddReservation(reservation);
 
-                MessageBox.Show("Reservation saved successfully!");
+                try
+                {
+                    SendConfirmationEmail(
+                        txtEmail.Text.Trim(),
+                        $"{txtFirstName.Text.Trim()} {txtLastName.Text.Trim()}",
+                        selectedRoom.RoomNumber,
+                        selectedRoom.RoomType,
+                        dpCheckIn.SelectedDate.Value,
+                        dpCheckOut.SelectedDate.Value,
+                        reservation.TotalAmount
+                    );
+
+                    MessageBox.Show("Reservation saved and confirmation email sent!");
+                }
+                catch
+                {
+                    MessageBox.Show("Reservation saved, but email was not sent.");
+                }
 
                 DialogResult = true;
                 Close();

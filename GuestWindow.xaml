@@ -5,21 +5,26 @@
         Width="1400"
         Height="900"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Background="#C1E1C1"
         ResizeMode="CanResize">
+        
 
     <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- HEADER -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <!-- BACK BUTTON -->
             <Button Width="55"
                     Height="55"
                     Background="#4A8150"
@@ -29,6 +34,7 @@
                     FontWeight="Bold"
                     Cursor="Hand"
                     Click="Back_Click">
+
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
@@ -38,9 +44,11 @@
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
+
                 ←
             </Button>
 
+            <!-- TITLE -->
             <TextBlock Grid.Column="1"
                        Text="Guest / Reservation List"
                        FontSize="36"
@@ -50,7 +58,59 @@
                        Margin="20,0,0,0"/>
         </Grid>
 
+        <!-- MODERN SEARCH BAR -->
         <Border Grid.Row="1"
+        Background="White"
+        Height="58"
+        CornerRadius="16"
+        Padding="8"
+        Margin="0,0,0,20"
+        VerticalAlignment="Center">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- SEARCH TEXTBOX -->
+                <TextBox x:Name="txtSearch"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 FontSize="16"
+                 Padding="16,0"
+                 VerticalContentAlignment="Center"
+                 Foreground="#1F2937"
+                 TextChanged="txtSearch_TextChanged"/>
+
+                <!-- MODERN SEARCH BUTTON -->
+                <Button Grid.Column="1"
+                Content="🔍 Search"
+                Height="42"
+                Margin="10,0,0,0"
+                Background="#4A8150"
+                Foreground="White"
+                BorderThickness="0"
+                FontWeight="SemiBold"
+                FontSize="15"
+                Cursor="Hand">
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                            CornerRadius="14">
+
+                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- MAIN GRID -->
+        <Border Grid.Row="2"
                 Background="#4A8150"
                 CornerRadius="15"
                 Padding="25">
@@ -68,42 +128,174 @@
                       CanUserReorderColumns="False"
                       SelectionMode="Single"
                       SelectionUnit="FullRow"
-                      RowHeight="40"
-                      HeadersVisibility="Column">
+                      RowHeight="45"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal" MouseDoubleClick="GuestGrid_MouseDoubleClick">
 
                 <DataGrid.Columns>
 
                     <DataGridTextColumn Header="Guest Name"
-                        Binding="{Binding GuestName}"
-                        Width="*"/>
+                                        Binding="{Binding GuestName}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Phone Number"
-                        Binding="{Binding Phone}"
-                        Width="*"/>
+                                        Binding="{Binding Phone}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Email"
-                        Binding="{Binding Email}"
-                        Width="*"/>
+                                        Binding="{Binding Email}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Address"
-                        Binding="{Binding Address}"
-                        Width="*"/>
+                                        Binding="{Binding Address}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Room Number"
-                        Binding="{Binding RoomNumber}"
-                        Width="*"/>
+                                        Binding="{Binding RoomNumber}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Check In Date"
-                        Binding="{Binding CheckInStr}"
-                        Width="*"/>
+                                        Binding="{Binding CheckInStr}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Check Out Date"
-                        Binding="{Binding CheckOutStr}"
-                        Width="*"/>
+                                        Binding="{Binding CheckOutStr}"
+                                        Width="*"/>
 
                     <DataGridTextColumn Header="Status"
-                        Binding="{Binding Status}"
-                        Width="*"/>
+                                        Binding="{Binding Status}"
+                                        Width="*"/>
+
+                    <!-- CHECK IN -->
+                    <DataGridTemplateColumn Header="Check In"
+                                            Width="108">
+
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="✓"
+        Width="75"
+        Height="27"
+        Background="#16A34A"
+        Foreground="White"
+        BorderThickness="0"
+        FontWeight="Bold"
+        FontSize="14"
+        Cursor="Hand"
+        ToolTip="Check In"
+        Click="CheckIn_Click">
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                    CornerRadius="8">
+
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- CHECK OUT -->
+                    <DataGridTemplateColumn Header="Check Out"
+                                            Width="108">
+
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <Button Content="↗"
+        Width="75"
+        Height="27"
+        Background="#EA580C"
+        Foreground="White"
+        BorderThickness="0"
+        FontWeight="Bold"
+        FontSize="14"
+        Cursor="Hand"
+        ToolTip="Check Out"
+        Click="CheckOut_Click">
+
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                    CornerRadius="8">
+
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- ACTIONS -->
+                    <DataGridTemplateColumn Header="Actions"
+                                            Width="180">
+
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Button Content="✎ Edit"
+        Width="78"
+        Height="27"
+        Margin="0,0,8,0"
+        Background="#2563EB"
+        Foreground="White"
+        BorderThickness="0"
+        FontWeight="SemiBold"
+        FontSize="13"
+        Cursor="Hand"
+        Click="Edit_Click">
+
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                    CornerRadius="10">
+
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                    <Button Content="✕"
+        Width="50"
+        Height="27"
+        Background="#DC2626"
+        Foreground="White"
+        BorderThickness="0"
+        FontWeight="SemiBold"
+        FontSize="13"
+        Cursor="Hand"
+        Click="Cancel_Click">
+
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                    CornerRadius="10">
+
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                 </DataGrid.Columns>
             </DataGrid>

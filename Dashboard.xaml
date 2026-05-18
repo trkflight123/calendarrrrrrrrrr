@@ -6,7 +6,8 @@
         Height="900"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        Background="#C1E1C1">
+        Background="#C1E1C1"
+        WindowState="Maximized">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -173,7 +174,7 @@
                                         <StackPanel Margin="0,12,0,0">
                                             <TextBlock Text="{Binding RoomName}"
                                        Foreground="#FFD65A"
-                                       FontSize="15"
+                                       FontSize="24"
                                        FontWeight="Bold"
                                        TextWrapping="Wrap"
                                        Margin="0,0,0,6"/>
@@ -247,11 +248,23 @@
                                    VerticalAlignment="Center"/>
 
                         <DataGrid Grid.Row="1"
-                                  x:Name="RoomStatusGrid"
-                                  AutoGenerateColumns="False"
-                                  Background="White"
-                                  BorderThickness="0"
-                                  FontSize="14">
+                              x:Name="RoomStatusGrid"
+                              AutoGenerateColumns="False"
+                              Background="White"
+                              BorderThickness="0"
+                              FontSize="14"
+
+                              IsReadOnly="True"
+                              CanUserResizeColumns="False"
+                              CanUserResizeRows="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserReorderColumns="False"
+
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow">
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Room"

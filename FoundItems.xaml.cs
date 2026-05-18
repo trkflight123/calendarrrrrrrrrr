@@ -26,7 +26,7 @@ namespace calendarrrrrrrrrr
         {
             Dashboard dashboard = new Dashboard();
             dashboard.Show();
-            Close();
+            this.Hide();
         }
     }
 }

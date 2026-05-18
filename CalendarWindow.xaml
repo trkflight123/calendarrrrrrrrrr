@@ -9,6 +9,7 @@
         Height="900" Width="1400"
         MinHeight="768" MinWidth="1200"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Background="{StaticResource BackgroundBrush}"
         Foreground="{StaticResource TextPrimaryBrush}"
         FontFamily="{StaticResource UIFont}"

@@ -5,6 +5,7 @@
         Width="1400"
         Height="900"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         ResizeMode="CanResize"
         Background="#C1E1C1">
 

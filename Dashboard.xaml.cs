@@ -35,10 +35,10 @@ namespace calendarrrrrrrrrr
                 .Where(r => r.Status == "Available")
                 .Select(r => new RoomCard
                 {
-                    RoomName = $"Room {r.RoomNumber} - {r.RoomType}",
+                    RoomName = $"Room {r.RoomNumber}",
                     RoomType = r.RoomType,
-                    Capacity = $"Occupancy: {r.Capacity} pax",
-                    Status = $"Availability: {r.Status}",
+                    Capacity = $"{r.Capacity} pax",
+                    Status = r.Status,
                     Price = $"₱{r.PricePerNight:N2} / night",
                     ImagePath = r.PhotoPath
                 })
@@ -46,7 +46,7 @@ namespace calendarrrrrrrrrr
 
             currentRoomIndex = 0;
             ShowCurrentRoom();
-
+                
             RoomStatusGrid.ItemsSource = availableRooms;
         }
 
@@ -88,7 +88,7 @@ namespace calendarrrrrrrrrr
 
             calendarWindow.Show();
 
-            Close();
+            this.Hide();
         }
 
         private void Guest_Click(object sender, RoutedEventArgs e)
@@ -96,7 +96,7 @@ namespace calendarrrrrrrrrr
             GuestWindow guestWindow = new GuestWindow();
             guestWindow.Show();
 
-            Close();
+            this.Hide();
         }
 
         
@@ -110,7 +110,7 @@ namespace calendarrrrrrrrrr
         {
             FoundItems foundItemsWindow = new FoundItems();
             foundItemsWindow.Show();
-            Close();
+            this.Hide();
         }
     }
 
