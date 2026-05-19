@@ -327,17 +327,6 @@
                                                     Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
-
-                        <Button Grid.Row="2"
-                                Content="See more"
-                                Width="130"
-                                Height="45"
-                                Background="#008B8B"
-                                Foreground="White"
-                                BorderThickness="0"
-                                FontWeight="Bold"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"/>
                     </Grid>
                 </Border>
             </Grid>

@@ -117,7 +117,7 @@ namespace calendarrrrrrrrrr
             Events eventsWindow = new Events();
             eventsWindow.Show();
 
-            Close();
+            this.Hide();
         }
     }
 
