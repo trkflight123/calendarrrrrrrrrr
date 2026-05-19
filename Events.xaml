@@ -4,322 +4,274 @@
         Title="Events"
         Width="1400"
         Height="900"
+        MinWidth="1150"
+        MinHeight="760"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Background="#C1E1C1"
         ResizeMode="CanResize">
 
-    <Grid Margin="25">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
 
-        <!-- HEADER -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid Margin="35"
+              MinWidth="1080"
+              MinHeight="690">
 
-            <Button Width="55"
-                    Height="55"
-                    Background="#4A8150"
-                    BorderThickness="0"
-                    Foreground="White"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Cursor="Hand"
-                    Click="Back_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="14">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-                ←
-            </Button>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        Margin="10,0,0,0">
+            <!-- HEADER -->
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                <Button Content="←"
+                        Width="55"
+                        Height="55"
+                        Background="#4A8150"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Cursor="Hand"
+                        Click="Back_Click"/>
 
                 <TextBlock Text="📅"
-                           FontSize="42"
-                           Margin="0,0,12,0"/>
+                           FontSize="38"
+                           Margin="25,0,12,0"/>
 
                 <TextBlock Text="Events"
-                           FontSize="36"
+                           FontSize="34"
                            FontWeight="Bold"
-                           Foreground="#1B1F24"/>
+                           Foreground="#10201A"
+                           VerticalAlignment="Center"/>
             </StackPanel>
-        </Grid>
 
-        <!-- MAIN CONTENT -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="430"/>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <!-- BODY -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="430"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- LEFT EVENTS -->
-            <Border Grid.Column="0"
-                    Background="#4A8150"
-                    Padding="18">
+                <!-- LEFT EVENT LIST -->
+                <Border Grid.Column="0"
+                        Background="#4A8150"
+                        CornerRadius="18"
+                        Padding="22">
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl x:Name="EventsList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="#F2F1FB"
-                                        CornerRadius="18"
-                                        Height="300"
-                                        Margin="0,0,0,28"
-                                        Padding="22">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="EventsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F4F3FF"
+                                            CornerRadius="18"
+                                            Padding="24"
+                                            Height="260"
+                                            Margin="0,0,0,22">
 
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding EventDateText}"
-                                                   Foreground="#5A8A5E"
-                                                   FontWeight="Bold"
-                                                   FontSize="18"
-                                                   Margin="0,0,0,12"/>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding EventDateText}"
+                                                       Foreground="#4A8150"
+                                                       FontWeight="Bold"
+                                                       FontSize="17"/>
 
-                                        <TextBlock Text="{Binding EventName}"
-                                                   Foreground="#5A67FF"
-                                                   FontWeight="Bold"
-                                                   FontSize="19"
-                                                   Margin="0,0,0,16"/>
+                                            <TextBlock Text="{Binding EventName}"
+                                                       Foreground="#5B5BEA"
+                                                       FontWeight="Bold"
+                                                       FontSize="18"
+                                                       Margin="0,10,0,14"/>
 
-                                        <TextBlock Text="{Binding EventTimeText}"
-                                                   Foreground="#6B7280"
-                                                   FontSize="15"
-                                                   Margin="0,0,0,10"/>
+                                            <TextBlock Text="{Binding EventTimeText}"
+                                                       Foreground="#4B5563"
+                                                       FontSize="15"
+                                                       Margin="0,0,0,10"/>
 
-                                        <TextBlock Text="⌖  Hotel Yncierto"
-                                                   Foreground="#6B7280"
-                                                   FontSize="15"/>
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
+                                            <TextBlock Text="⌖  Hotel Yncierto"
+                                                       Foreground="#4B5563"
+                                                       FontSize="15"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
 
-            <!-- RIGHT SIDE -->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="430"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="260"/>
-                </Grid.RowDefinitions>
+                <!-- RIGHT SIDE -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
 
-                <!-- CALENDAR -->
-                <Border Background="#4A8150"
-                        Padding="20">
-
-                    <Border Background="#F8F8F8"
+                    <!-- CALENDAR CARD -->
+                    <Border Grid.Row="0"
+                            Background="#4A8150"
                             CornerRadius="18"
-                            Padding="28">
+                            Padding="20">
+
+                        <Border Background="White"
+                                CornerRadius="20"
+                                Padding="32">
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- CALENDAR HEADER -->
+                                <Grid>
+                                    <TextBlock x:Name="txtMonthTitle"
+                                               Text="May 2026"
+                                               FontSize="32"
+                                               FontWeight="Bold"
+                                               Foreground="#111827"
+                                               VerticalAlignment="Center"/>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center">
+
+                                        <Button Content="‹"
+                                                Width="42"
+                                                Height="42"
+                                                Background="#F3F4F6"
+                                                Foreground="#4A8150"
+                                                BorderThickness="0"
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Cursor="Hand"
+                                                Click="PrevMonth_Click"/>
+
+                                        <Button Content="›"
+                                                Width="42"
+                                                Height="42"
+                                                Margin="10,0,0,0"
+                                                Background="#F3F4F6"
+                                                Foreground="#4A8150"
+                                                BorderThickness="0"
+                                                FontSize="26"
+                                                FontWeight="Bold"
+                                                Cursor="Hand"
+                                                Click="NextMonth_Click"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- CALENDAR DAYS -->
+                                <UniformGrid Grid.Row="1"
+                                             x:Name="CalendarDaysPanel"
+                                             Columns="7"
+                                             Rows="7"
+                                             Margin="0,15,0,0"/>
+                            </Grid>
+                        </Border>
+                    </Border>
+
+                    <!-- ADD EVENT -->
+                    <Border Grid.Row="2"
+                            Background="#4A8150"
+                            CornerRadius="18"
+                            Padding="24">
 
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="60"/>
-                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="55"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <Grid>
-                                <TextBlock Text="February 2022"
-                                           FontSize="34"
+                            <TextBlock Text="Add Event"
+                                       FontSize="28"
+                                       FontWeight="Bold"
+                                       Foreground="White"/>
+
+                            <!-- DATE AND TIME -->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="230"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Date"
+                                           Foreground="White"
+                                           FontSize="17"
                                            FontWeight="Bold"
-                                           Foreground="#1B1F24"
                                            VerticalAlignment="Center"/>
 
-                                <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Center">
-                                    <TextBlock Text="‹"
-                                               FontSize="34"
-                                               Foreground="#9CA3AF"
-                                               Margin="0,0,18,0"/>
-                                    <TextBlock Text="›"
-                                               FontSize="34"
-                                               Foreground="#9CA3AF"/>
-                                </StackPanel>
+                                <DatePicker x:Name="dpEventDate"
+                                            Grid.Column="1"
+                                            Height="42"
+                                            Background="White"
+                                            Foreground="Black"
+                                            FontSize="15"
+                                            VerticalContentAlignment="Center" Margin="50,0,0,0"/>
+
+                                <TextBlock Text="Time"
+                                           Grid.Column="2"
+                                           Foreground="White"
+                                           FontSize="17"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+
+                                <TextBox x:Name="txtEventTime"
+                                         Grid.Column="3"
+                                         Height="42"
+                                         Background="White"
+                                         Foreground="Black"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"/>
                             </Grid>
 
-                            <UniformGrid Grid.Row="1" Columns="7">
-                                <TextBlock Text="Mon" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Tue" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Wed" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Thu" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Fri" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Sat" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Sun" Foreground="#5A67FF" FontWeight="Bold" HorizontalAlignment="Center"/>
-                            </UniformGrid>
+                            <!-- EVENT NAME -->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <UniformGrid Grid.Row="2" Columns="7" Rows="5">
-                                <TextBlock Text="29" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="30" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="31" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="1" HorizontalAlignment="Center"/>
-                                <TextBlock Text="2" HorizontalAlignment="Center"/>
-                                <TextBlock Text="3" HorizontalAlignment="Center"/>
-                                <TextBlock Text="4" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Event Name"
+                                           Foreground="White"
+                                           FontSize="17"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"/>
 
-                                <TextBlock Text="5" HorizontalAlignment="Center"/>
-                                <TextBlock Text="6" HorizontalAlignment="Center"/>
-                                <TextBlock Text="7" HorizontalAlignment="Center"/>
-                                <TextBlock Text="8" HorizontalAlignment="Center"/>
-                                <TextBlock Text="9" HorizontalAlignment="Center"/>
-                                <TextBlock Text="10" HorizontalAlignment="Center"/>
-                                <TextBlock Text="11" HorizontalAlignment="Center"/>
+                                <TextBox x:Name="txtEventName"
+                                         Grid.Column="1"
+                                         Height="42"
+                                         Background="White"
+                                         Foreground="Black"
+                                         Padding="12,0"
+                                         VerticalContentAlignment="Center"/>
+                            </Grid>
 
-                                <TextBlock Text="12" HorizontalAlignment="Center"/>
-                                <TextBlock Text="13" HorizontalAlignment="Center"/>
-
-                                <Border x:Name="Day14"
-                                        CornerRadius="12"
-                                        Background="Transparent">
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <TextBlock Text="14" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="•" Foreground="#4A8150" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </Border>
-
-                                <TextBlock Text="15" HorizontalAlignment="Center"/>
-                                <TextBlock Text="16" HorizontalAlignment="Center"/>
-                                <TextBlock Text="17" HorizontalAlignment="Center"/>
-                                <TextBlock Text="18" HorizontalAlignment="Center"/>
-
-                                <TextBlock Text="19" HorizontalAlignment="Center"/>
-                                <TextBlock Text="20" HorizontalAlignment="Center"/>
-                                <TextBlock Text="21" HorizontalAlignment="Center"/>
-
-                                <Border x:Name="Day22"
-                                        CornerRadius="12"
-                                        Background="Transparent">
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <TextBlock Text="22" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="•" Foreground="#4A8150" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </Border>
-
-                                <TextBlock Text="23" HorizontalAlignment="Center"/>
-                                <TextBlock Text="24" HorizontalAlignment="Center"/>
-                                <TextBlock Text="25" HorizontalAlignment="Center"/>
-
-                                <TextBlock Text="26" HorizontalAlignment="Center"/>
-                                <TextBlock Text="27" HorizontalAlignment="Center"/>
-                                <TextBlock Text="28" HorizontalAlignment="Center"/>
-                                <TextBlock Text="1" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="2" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="3" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                <TextBlock Text="4" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                            </UniformGrid>
+                            <!-- BUTTON -->
+                            <Button Grid.Row="3"
+                                    Content="Add"
+                                    Width="110"
+                                    Height="45"
+                                    Background="#F4B32F"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontWeight="Bold"
+                                    FontSize="16"
+                                    Cursor="Hand"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Click="AddEvent_Click"/>
                         </Grid>
                     </Border>
-                </Border>
-
-                <!-- ADD EVENT -->
-                <Border Grid.Row="2"
-                        Background="#4A8150"
-                        Padding="22">
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="45"/>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="Add Event"
-                                   FontSize="26"
-                                   FontWeight="Bold"
-                                   Foreground="White"/>
-
-                        <!-- DATE AND TIME -->
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="220"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Date"
-                                       Foreground="White"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"/>
-                            <DatePicker x:Name="dpEventDate"
-                                        Grid.Column="1"
-                                        Height="40"
-                                        FontSize="14"
-                                        Background="White"
-                                        Foreground="Black"
-                                        BorderBrush="#D1D5DB"
-                                        VerticalContentAlignment="Center"/>
-
-                            <TextBlock Text="Time"
-                                       Grid.Column="2"
-                                       Foreground="White"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"/>
-
-                            <TextBox x:Name="txtEventTime"
-                                     Grid.Column="3"
-                                         Height="40"
-                                         FontSize="15"
-                                         Background="White"
-                                         Foreground="Black"
-                                         BorderBrush="#D1D5DB"/>
-                        </Grid>
-
-                        <!-- EVENT NAME -->
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock Text="Event Name"
-                                       Foreground="White"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"/>
-
-                            <TextBox x:Name="txtEventName"
-                                      Grid.Column="1"
-                                         Height="40"
-                                         FontSize="15"
-                                         Background="White"
-                                         Foreground="Black"
-                                         BorderBrush="#D1D5DB"/>        
-                        </Grid>
-
-                        <Button Grid.Row="3"
-                                Content="Add"
-                                Width="80"
-                                Height="42"
-                                Background="#F4B32F"
-                                Foreground="White"
-                                BorderThickness="0"
-                                FontWeight="Bold"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"
-                                Click="AddEvent_Click"/>
-                    </Grid>
-                </Border>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </Window>

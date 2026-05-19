@@ -1,45 +1,133 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using calendarrrrrrrrrr.Data;
+using calendarrrrrrrrrr.Models;
 
 namespace calendarrrrrrrrrr
 {
     public partial class Events : Window
     {
-        private List<EventItem> events = new();
+        private DateTime currentMonth = DateTime.Now;
 
         public Events()
         {
             InitializeComponent();
 
-            LoadDefaultEvents();
+            DatabaseService.Initialize();
             LoadEvents();
-        }
-
-        private void LoadDefaultEvents()
-        {
-            events.Add(new EventItem
-            {
-                EventDateText = "February 14, 2022",
-                EventName = "Food Bazaar",
-                EventTimeText = "◷  5:00PM - 11:00PM"
-            });
-
-            events.Add(new EventItem
-            {
-                EventDateText = "February 22, 2022",
-                EventName = "General Cleaning",
-                EventTimeText = "◷  6:00AM Onwards"
-            });
-
-            Day14.Background = new SolidColorBrush(Color.FromRgb(209, 250, 229));
-            Day22.Background = new SolidColorBrush(Color.FromRgb(209, 250, 229));
         }
 
         private void LoadEvents()
         {
+            var events = DatabaseService.GetAllEvents();
+
             EventsList.ItemsSource = null;
             EventsList.ItemsSource = events;
+
+            LoadCalendar();
+        }
+
+        private void LoadCalendar()
+        {
+            CalendarDaysPanel.Children.Clear();
+
+            txtMonthTitle.Text = currentMonth.ToString("MMMM yyyy");
+
+            DateTime firstDay =
+                new DateTime(currentMonth.Year, currentMonth.Month, 1);
+
+            int daysInMonth =
+                DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+
+            int startOffset =
+                ((int)firstDay.DayOfWeek + 6) % 7;
+
+            string[] weekDays =
+            {
+        "Mon","Tue","Wed","Thu","Fri","Sat","Sun"
+    };
+
+            // WEEKDAY HEADERS
+            foreach (string dayName in weekDays)
+            {
+                TextBlock header = new TextBlock
+                {
+                    Text = dayName,
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 15,
+                    Foreground = new SolidColorBrush(Color.FromRgb(91, 91, 234)),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 0, 0, 15)
+                };
+
+                CalendarDaysPanel.Children.Add(header);
+            }
+
+            // EMPTY SPACES
+            for (int i = 0; i < startOffset; i++)
+            {
+                CalendarDaysPanel.Children.Add(new Border());
+            }
+
+            var events = DatabaseService.GetAllEvents();
+
+            // DAYS
+            for (int day = 1; day <= daysInMonth; day++)
+            {
+                DateTime date =
+                    new DateTime(currentMonth.Year, currentMonth.Month, day);
+
+                bool hasEvent =
+                    events.Exists(e => e.EventDate.Date == date.Date);
+
+                Border border = new Border
+                {
+                    Width = 55,
+                    Height = 55,
+                    CornerRadius = new CornerRadius(12),
+                    Background = hasEvent
+                        ? new SolidColorBrush(Color.FromRgb(209, 250, 229))
+                        : Brushes.Transparent,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                StackPanel stack = new StackPanel
+                {
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                TextBlock txtDay = new TextBlock
+                {
+                    Text = day.ToString(),
+                    FontSize = 15,
+                    FontWeight = FontWeights.SemiBold,
+                    Foreground = Brushes.Black,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center
+                };
+
+                stack.Children.Add(txtDay);
+
+                if (hasEvent)
+                {
+                    stack.Children.Add(new TextBlock
+                    {
+                        Text = "•",
+                        FontSize = 18,
+                        FontWeight = FontWeights.Bold,
+                        Foreground =
+                            new SolidColorBrush(Color.FromRgb(74, 129, 80)),
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    });
+                }
+
+                border.Child = stack;
+
+                CalendarDaysPanel.Children.Add(border);
+            }
         }
 
         private void AddEvent_Click(object sender, RoutedEventArgs e)
@@ -52,17 +140,17 @@ namespace calendarrrrrrrrrr
                 return;
             }
 
-            string eventDateText =
-                dpEventDate.SelectedDate.Value.ToString("MMMM dd, yyyy");
-
-            events.Add(new EventItem
+            HotelEvent hotelEvent = new HotelEvent
             {
-                EventDateText = eventDateText,
+                EventDate = dpEventDate.SelectedDate.Value,
+                EventTime = txtEventTime.Text.Trim(),
                 EventName = txtEventName.Text.Trim(),
-                EventTimeText = "◷  " + txtEventTime.Text.Trim()
-            });
+                Location = "Hotel Yncierto"
+            };
 
-            HighlightCalendarDay(dpEventDate.SelectedDate.Value.Day);
+            DatabaseService.AddEvent(hotelEvent);
+
+            currentMonth = hotelEvent.EventDate;
 
             LoadEvents();
 
@@ -73,28 +161,23 @@ namespace calendarrrrrrrrrr
             MessageBox.Show("Event added successfully!");
         }
 
-        private void HighlightCalendarDay(int day)
-        {
-            if (day == 14)
-                Day14.Background = new SolidColorBrush(Color.FromRgb(209, 250, 229));
-
-            if (day == 22)
-                Day22.Background = new SolidColorBrush(Color.FromRgb(209, 250, 229));
-        }
-
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             Dashboard dashboard = new Dashboard();
             dashboard.Show();
-
             Close();
         }
-    }
 
-    public class EventItem
-    {
-        public string EventDateText { get; set; } = "";
-        public string EventName { get; set; } = "";
-        public string EventTimeText { get; set; } = "";
+        private void PrevMonth_Click(object sender, RoutedEventArgs e)
+        {
+            currentMonth = currentMonth.AddMonths(-1);
+            LoadCalendar();
+        }
+
+        private void NextMonth_Click(object sender, RoutedEventArgs e)
+        {
+            currentMonth = currentMonth.AddMonths(1);
+            LoadCalendar();
+        }
     }
 }

@@ -139,6 +139,22 @@ namespace calendarrrrrrrrrr.Models
     }
 
     // ═══════════════════════════════════════
+    //                 Event
+    // ═══════════════════════════════════════
+    public class HotelEvent
+    {
+        public int EventId { get; set; }
+        public DateTime EventDate { get; set; }
+        public string EventTime { get; set; } = string.Empty;
+        public string EventName { get; set; } = string.Empty;
+        public string Location { get; set; } = "Hotel Yncierto";
+        public DateTime CreatedAt { get; set; }
+
+        public string EventDateText => EventDate.ToString("MMMM dd, yyyy");
+        public string EventTimeText => "◷  " + EventTime;
+    }
+
+    // ═══════════════════════════════════════
     //                 USER
     // ═══════════════════════════════════════
     public class User

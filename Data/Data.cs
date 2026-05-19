@@ -113,6 +113,13 @@ namespace calendarrrrrrrrrr.Data
                     ItemName TEXT NOT NULL,
                     Status TEXT NOT NULL DEFAULT 'Unclaimed',
                     CreatedAt TEXT NOT NULL);",
+                @"CREATE TABLE IF NOT EXISTS HotelEvents (
+                    EventId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EventDate TEXT NOT NULL,
+                    EventTime TEXT NOT NULL,
+                    EventName TEXT NOT NULL,
+                    Location TEXT NOT NULL DEFAULT 'Hotel Yncierto',
+                    CreatedAt TEXT NOT NULL);",
                 @"CREATE TABLE IF NOT EXISTS Payments (
                     PaymentId INTEGER PRIMARY KEY AUTOINCREMENT,
                     ReservationId INTEGER NOT NULL,
@@ -864,7 +871,7 @@ namespace calendarrrrrrrrrr.Data
         }
 
         // ═══════════════════════════════════════
-        //               ADD FOUNF ITEM
+        //               ADD FOUND ITEM
         // ═══════════════════════════════════════
         public static void AddFoundItem(FoundItem item)
         {
@@ -907,6 +914,84 @@ namespace calendarrrrrrrrrr.Data
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        // ═══════════════════════════════════════
+        //               ADD EVENT
+        // ═══════════════════════════════════════
+        public static void AddEvent(HotelEvent hotelEvent)
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"INSERT INTO HotelEvents
+                       (EventDate, EventTime, EventName, Location, CreatedAt)
+                       VALUES
+                       (@Date, @Time, @Name, @Location, @CreatedAt)";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Date",
+                        hotelEvent.EventDate.ToString("yyyy-MM-dd"));
+
+                    cmd.Parameters.AddWithValue("@Time",
+                        hotelEvent.EventTime);
+
+                    cmd.Parameters.AddWithValue("@Name",
+                        hotelEvent.EventName);
+
+                    cmd.Parameters.AddWithValue("@Location",
+                        hotelEvent.Location);
+
+                    cmd.Parameters.AddWithValue("@CreatedAt",
+                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static List<HotelEvent> GetAllEvents()
+        {
+            EnsureInitialized();
+
+            var list = new List<HotelEvent>();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(
+                    "SELECT * FROM HotelEvents ORDER BY EventDate DESC", conn))
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new HotelEvent
+                        {
+                            EventId = Convert.ToInt32(reader["EventId"]),
+
+                            EventDate = DateTime.Parse(
+                                reader["EventDate"].ToString()),
+
+                            EventTime = reader["EventTime"].ToString(),
+
+                            EventName = reader["EventName"].ToString(),
+
+                            Location = reader["Location"].ToString(),
+
+                            CreatedAt = DateTime.Parse(
+                                reader["CreatedAt"].ToString())
+                        });
+                    }
+                }
+            }
+
+            return list;
         }
 
 
