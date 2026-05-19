@@ -164,7 +164,9 @@ namespace calendarrrrrrrrrr
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            LogIn login = new LogIn();
+            login.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

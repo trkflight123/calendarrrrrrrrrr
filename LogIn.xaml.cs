@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace calendarrrrrrrrrr
 {
@@ -27,9 +28,63 @@ namespace calendarrrrrrrrrr
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            Dashboard dashboard = new Dashboard();
-            dashboard.Show();
-            Close();
+            string username = txtUsername.Text;
+            string password = isPasswordVisible ? txtPasswordVisible.Text : txtPassword.Password;
+
+            if (username == "admin" && password == "admin123")
+            {
+                Dashboard dashboard = new Dashboard();
+                dashboard.Show();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid username or password",
+                                "Login Failed",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
         }
+
+        private void txtUsername_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (txtUsername.Text == "Username")
+            {
+                txtUsername.Text = "";
+                txtUsername.Foreground = Brushes.White;
+            }
+        }
+
+        private void txtUsername_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                txtUsername.Text = "Username";
+                txtUsername.Foreground = Brushes.Gray;
+            }
+        }
+
+        private bool isPasswordVisible = false;
+
+        private void btnShowPassword_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isPasswordVisible)
+            {
+                txtPasswordVisible.Text = txtPassword.Password;
+                txtPasswordVisible.Visibility = Visibility.Visible;
+                txtPassword.Visibility = Visibility.Collapsed;
+                btnShowPassword.Content = "🙈";
+                isPasswordVisible = true;
+            }
+            else
+            {
+                txtPassword.Password = txtPasswordVisible.Text;
+                txtPassword.Visibility = Visibility.Visible;
+                txtPasswordVisible.Visibility = Visibility.Collapsed;
+                btnShowPassword.Content = "👁";
+                isPasswordVisible = false;
+            }
+        }
+
     }
 }

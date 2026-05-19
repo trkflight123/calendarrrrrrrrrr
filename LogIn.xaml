@@ -44,7 +44,8 @@
 
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                Margin="0,0,12,0">
 
                         <Button Content="—"
                                 Width="45"
@@ -123,21 +124,23 @@
                                  Grid.Column="1"
                                  Background="Transparent"
                                  BorderThickness="0"
-                                 Foreground="White"
+                                 Foreground="Gray"
                                  FontSize="18"
                                  VerticalContentAlignment="Center"
                                  Padding="0"
-                                 Text="Username"/>
+                                 Text="Username"
+                                 GotFocus="txtUsername_GotFocus"
+                                 LostFocus="txtUsername_LostFocus"/>
                     </Grid>
                 </Border>
 
                 <!-- PASSWORD -->
                 <Border Height="58"
-                        CornerRadius="10"
-                        BorderBrush="#55645F"
-                        BorderThickness="1"
-                        Background="#142A24"
-                        Margin="0,0,0,22">
+        CornerRadius="10"
+        BorderBrush="#55645F"
+        BorderThickness="1"
+        Background="#142A24"
+        Margin="0,0,0,22">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -147,41 +150,54 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="🔒"
-                                   Foreground="#D1D5DB"
-                                   FontSize="22"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+                   Foreground="#D1D5DB"
+                   FontSize="22"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
 
                         <PasswordBox x:Name="txtPassword"
-                                     Grid.Column="1"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Foreground="White"
-                                     FontSize="18"
-                                     VerticalContentAlignment="Center"
-                                     Padding="0"/>
+                     Grid.Column="1"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Foreground="White"
+                     FontSize="18"
+                     VerticalContentAlignment="Center"
+                     Padding="0"/>
 
-                        <TextBlock Grid.Column="2"
-                                   Text="👁"
-                                   Foreground="#D1D5DB"
-                                   FontSize="20"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
+                        <TextBox x:Name="txtPasswordVisible"
+                 Grid.Column="1"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 Foreground="White"
+                 FontSize="18"
+                 VerticalContentAlignment="Center"
+                 Padding="0"
+                 Visibility="Collapsed"/>
+
+                        <Button x:Name="btnShowPassword"
+                Grid.Column="2"
+                Content="👁"
+                Background="Transparent"
+                BorderThickness="0"
+                Foreground="#D1D5DB"
+                FontSize="18"
+                Cursor="Hand"
+                Click="btnShowPassword_Click"/>
                     </Grid>
                 </Border>
 
                 <!-- REMEMBER / FORGOT -->
                 <Grid Margin="0,0,0,28">
                     <CheckBox Content="Remember me"
-                              Foreground="White"
-                              FontSize="15"
-                              VerticalAlignment="Center"/>
+              Foreground="White"
+              FontSize="15"
+              VerticalAlignment="Center"/>
 
                     <TextBlock Text="Forgot password?"
-                               Foreground="#43C6A3"
-                               FontSize="15"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Center"/>
+               Foreground="#43C6A3"
+               FontSize="15"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"/>
                 </Grid>
 
                 <!-- LOGIN BUTTON -->
@@ -212,4 +228,3 @@
         </Grid>
     </Border>
 </Window>
-    //updated diay ni sya
