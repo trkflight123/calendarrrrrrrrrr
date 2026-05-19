@@ -103,7 +103,7 @@
 
                 <!-- LOGOUT -->
                 <Button Grid.Row="2"
-                Content="↩  Log out"
+                Content="↩  Exit"
                 Height="55"
                 Background="White"
                 BorderBrush="#4A8150"
