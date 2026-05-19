@@ -10,6 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Assets\addroom.png" />
+	  <None Remove="Assets\bookroom.png" />
+	  <None Remove="Assets\manageroom.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
 		<PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
 
@@ -33,7 +39,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Assets\addroom.png" />
+		<Resource Include="Assets\bookroom.png">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="Assets\logo.png" />
+		<Resource Include="Assets\manageroom.png" />
 	</ItemGroup>
 
 </Project>

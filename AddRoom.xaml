@@ -2,6 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Add Room"
+        Icon="Assets/addroom.png"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         Width="430"
         Height="760"
         WindowStartupLocation="CenterScreen"
@@ -43,10 +45,10 @@
 
         <!-- HEADER -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Text="▣"
+            <iconPacks:PackIconMaterial Kind="PlusCircleOutline"
                        FontSize="30"
                        Foreground="#4A8150"
-                       Margin="0,0,10,0"/>
+                       Margin="0,0,10,0" Height="33" Width="41"/>
 
             <TextBlock Text="Add Room"
                        FontSize="26"
