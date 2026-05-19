@@ -112,6 +112,13 @@ namespace calendarrrrrrrrrr
             foundItemsWindow.Show();
             this.Hide();
         }
+        private void Events_Click(object sender, RoutedEventArgs e)
+        {
+            Events eventsWindow = new Events();
+            eventsWindow.Show();
+
+            Close();
+        }
     }
 
     public class RoomCard
