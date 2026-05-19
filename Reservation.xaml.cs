@@ -141,7 +141,7 @@ Reservations Team";
         {
             try
             {
-                Icon = new BitmapImage(new Uri("pack://application:,,,/Assets/logo.png", UriKind.Absolute));
+                Icon = new BitmapImage(new Uri("pack://application:,,,/Assets/bookroom.png", UriKind.Absolute));
             }
             catch
             {

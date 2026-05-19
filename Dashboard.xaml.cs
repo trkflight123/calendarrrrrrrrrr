@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
@@ -8,11 +9,33 @@ using System.Threading.Tasks;
 
 namespace calendarrrrrrrrrr
 {
-    public partial class Dashboard : Window
+    public partial class Dashboard : Window, INotifyPropertyChanged
     {
         private DispatcherTimer roomTimer;
+        private DispatcherTimer greetingTimer;
         private List<RoomCard> availableRooms = new();
         private int currentRoomIndex = 0;
+        private string _greeting;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Greeting
+        {
+            get { return _greeting; }
+            set
+            {
+                if (_greeting != value)
+                {
+                    _greeting = value;
+                    OnPropertyChanged(nameof(Greeting));
+                }
+            }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Dashboard()
         {
@@ -21,10 +44,48 @@ namespace calendarrrrrrrrrr
             DatabaseService.Initialize();
             LoadRooms();
 
+            // Set the initial greeting and bind data context
+            this.DataContext = this;
+            UpdateGreeting();
+
+            // Timer for room rotation (every 5 seconds)
             roomTimer = new DispatcherTimer();
             roomTimer.Interval = TimeSpan.FromSeconds(5);
             roomTimer.Tick += RoomTimer_Tick;
             roomTimer.Start();
+
+            // Timer for greeting updates (every 5 seconds)
+            greetingTimer = new DispatcherTimer();
+            greetingTimer.Interval = TimeSpan.FromSeconds(5);
+            greetingTimer.Tick += (s, e) => UpdateGreeting();
+            greetingTimer.Start();
+        }
+
+        private void UpdateGreeting()
+        {
+            Greeting = CalculateGreeting();
+        }
+
+        private string CalculateGreeting()
+        {
+            int hour = DateTime.Now.Hour;
+
+            if (hour >= 0 && hour < 12)
+            {
+                return "🌞 Good Morning!";
+            }
+            else if (hour >= 12 && hour < 17)
+            {
+                return "☀️ Good Afternoon!";
+            }
+            else if (hour >= 17 && hour < 21)
+            {
+                return "🌆 Good Evening!";
+            }
+            else
+            {
+                return "🌙 Good Night!";
+            }
         }
 
         private void LoadRooms()

@@ -152,14 +152,46 @@ namespace calendarrrrrrrrrr
                     var checkOut = res.CheckOut.Date;
 
                     if (checkOut <= checkIn || (checkIn == date && checkOut == date.AddDays(1)))
+                    {
+                        var confirm = MessageBox.Show(
+                            $"Room {roomStatus.RoomNumber} is booked {checkIn:d} – {checkOut:d}.\n\n" +
+                            $"Clear this booking?",
+                            "Clear booking",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                        if (confirm != MessageBoxResult.Yes)
+                            return false;
+
                         DatabaseService.UpdateReservationStatus(res.ReservationId, "Cancelled");
+                    }
                     else if (checkIn == date)
                     {
+                        var confirm = MessageBox.Show(
+                            $"Room {roomStatus.RoomNumber} is booked {checkIn:d} – {checkOut:d}.\n\n" +
+                            $"Clear {date:d} will move check-in to {date.AddDays(1):d}. Continue?",
+                            "Clear booking",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                        if (confirm != MessageBoxResult.Yes)
+                            return false;
+
                         res.CheckIn = date.AddDays(1);
                         DatabaseService.UpdateReservation(res);
                     }
                     else if (checkOut == date.AddDays(1))
                     {
+                        var confirm = MessageBox.Show(
+                            $"Room {roomStatus.RoomNumber} is booked {checkIn:d} – {checkOut:d}.\n\n" +
+                            $"Clear {date:d} will move check-out to {date:d}. Continue?",
+                            "Clear booking",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                        if (confirm != MessageBoxResult.Yes)
+                            return false;
+
                         res.CheckOut = date;
                         DatabaseService.UpdateReservation(res);
                     }
@@ -167,8 +199,8 @@ namespace calendarrrrrrrrrr
                     {
                         var confirm = MessageBox.Show(
                             $"Room {roomStatus.RoomNumber} is booked {checkIn:d} – {checkOut:d}.\n\n" +
-                            $"Releasing {date:d} will cancel the entire reservation. Continue?",
-                            "Release room",
+                            $"Clearing {date:d} will cancel the entire reservation. Continue?",
+                            "Clear booking",
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question);
 
@@ -180,6 +212,15 @@ namespace calendarrrrrrrrrr
                 }
                 else if (roomStatus.Status is "Occupied" or "Reserved")
                 {
+                    var confirm = MessageBox.Show(
+                        $"Clear booking for Room {roomStatus.RoomNumber} on {date:d}?",
+                        "Clear booking",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (confirm != MessageBoxResult.Yes)
+                        return false;
+
                     DatabaseService.UpdateRoomStatus(roomStatus.RoomId, "Available");
                 }
                 else

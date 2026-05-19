@@ -127,11 +127,7 @@
 
             <!-- HEADER -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2">
-                <TextBlock Text="🌞"
-                           FontSize="34"
-                           Margin="0,0,12,0"/>
-
-                <TextBlock Text="Good Morning!"
+                <TextBlock Text="{Binding Greeting}"
                            FontSize="32"
                            FontWeight="Bold"
                            Foreground="Black"/>
