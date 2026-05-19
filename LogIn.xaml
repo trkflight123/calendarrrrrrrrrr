@@ -57,8 +57,8 @@
                                 Click="Minimize_Click"/>
 
                         <Button Content="×"
-                                Width="45"
-                                Height="40"
+                                Width="52"
+                                Height="48"
                                 Background="Transparent"
                                 Foreground="White"
                                 BorderThickness="0"
@@ -185,21 +185,7 @@
                 Click="btnShowPassword_Click"/>
                     </Grid>
                 </Border>
-
-                <!-- REMEMBER / FORGOT -->
-                <Grid Margin="0,0,0,28">
-                    <CheckBox Content="Remember me"
-              Foreground="White"
-              FontSize="15"
-              VerticalAlignment="Center"/>
-
-                    <TextBlock Text="Forgot password?"
-               Foreground="#43C6A3"
-               FontSize="15"
-               HorizontalAlignment="Right"
-               VerticalAlignment="Center"/>
-                </Grid>
-
+                
                 <!-- LOGIN BUTTON -->
                 <Button Content="↪  LOG IN"
                         Height="62"
@@ -209,7 +195,8 @@
                         FontWeight="Bold"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Click="Login_Click">
+                        Click="Login_Click"
+                        IsDefault="True">
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
