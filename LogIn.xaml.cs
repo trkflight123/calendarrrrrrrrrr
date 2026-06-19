@@ -23,7 +23,7 @@ namespace calendarrrrrrrrrr
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Application.Current.Shutdown();
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)

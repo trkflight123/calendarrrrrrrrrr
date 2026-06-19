@@ -1041,6 +1041,201 @@ namespace calendarrrrrrrrrr.Data
         }
 
         // ═══════════════════════════════════════
+        //             DASHBOARD DATA
+        // ═══════════════════════════════════════
+
+        public static int GetAvailableRoomsCount()
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(
+                    "SELECT COUNT(*) FROM Rooms WHERE Status = 'Available'", conn))
+                {
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+        public static int GetBookedRoomsThisMonth()
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                var start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
+                var end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).ToString("yyyy-MM-dd");
+
+                string sql = @"
+            SELECT COUNT(*)
+            FROM Reservations
+            WHERE Status NOT IN ('Cancelled')
+            AND date(CheckIn) >= date(@Start)
+            AND date(CheckIn) < date(@End)";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Start", start);
+                    cmd.Parameters.AddWithValue("@End", end);
+
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+        public static decimal GetTotalSalesOverall()
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(
+                    "SELECT COALESCE(SUM(Amount), 0) FROM Payments WHERE Status = 'Paid'", conn))
+                {
+                    return Convert.ToDecimal(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+        public static decimal GetMonthlySales(int year, int month)
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                var start = new DateTime(year, month, 1).ToString("yyyy-MM-dd");
+                var end = new DateTime(year, month, 1).AddMonths(1).ToString("yyyy-MM-dd");
+
+                string sql = @"
+            SELECT COALESCE(SUM(Amount), 0)
+            FROM Payments
+            WHERE Status = 'Paid'
+            AND date(PaidAt) >= date(@Start)
+            AND date(PaidAt) < date(@End)";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Start", start);
+                    cmd.Parameters.AddWithValue("@End", end);
+
+                    return Convert.ToDecimal(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+        public static List<Reservation> GetRecentBookings(int limit = 5)
+        {
+            EnsureInitialized();
+
+            var list = new List<Reservation>();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+            SELECT r.*,
+                   g.FirstName || ' ' || g.LastName AS GuestName,
+                   g.Phone,
+                   g.Email,
+                   g.Address,
+                   rm.RoomNumber,
+                   rm.RoomType,
+                   rm.PricePerNight
+            FROM Reservations r
+            JOIN Guests g ON r.GuestId = g.GuestId
+            JOIN Rooms rm ON r.RoomId = rm.RoomId
+            ORDER BY r.CreatedAt DESC
+            LIMIT @Limit";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Limit", limit);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(MapReservation(reader));
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public static List<HousekeepingTask> GetDashboardRoomAlerts(int limit = 5)
+        {
+            EnsureInitialized();
+
+            var list = new List<HousekeepingTask>();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+            SELECT h.*, r.RoomNumber
+            FROM HousekeepingTasks h
+            JOIN Rooms r ON h.RoomId = r.RoomId
+            WHERE h.Status NOT IN ('Done')
+            ORDER BY 
+                CASE h.Priority
+                    WHEN 'Urgent' THEN 1
+                    WHEN 'High' THEN 2
+                    WHEN 'Normal' THEN 3
+                    WHEN 'Low' THEN 4
+                    ELSE 5
+                END,
+                h.DueDate ASC
+            LIMIT @Limit";
+
+                using (var cmd = new SqliteCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Limit", limit);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(MapTask(reader));
+                        }
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public static int GetReservationStatusCount(string status)
+        {
+            EnsureInitialized();
+
+            using (var conn = new SqliteConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(
+                    "SELECT COUNT(*) FROM Reservations WHERE Status = @Status", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+        }
+
+
+        // ═══════════════════════════════════════
         //           MAPPING HELPER METHODS
         // ═══════════════════════════════════════
 

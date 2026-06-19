@@ -44,7 +44,46 @@ namespace calendarrrrrrrrrr
         {
             if ((sender as Button)?.DataContext is Reservation reservation)
             {
+                DateTime today = DateTime.Today;
+
+                if (reservation.CheckIn.Date != today)
+                {
+                    MessageBox.Show(
+                        $"This guest cannot check in today.\n\n" +
+                        $"Booked check-in date: {reservation.CheckIn:MMMM dd, yyyy}\n" +
+                        $"Today: {today:MMMM dd, yyyy}",
+                        "Check-in Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                if (reservation.Status == "Checked In")
+                {
+                    MessageBox.Show(
+                        "This guest is already checked in.",
+                        "Already Checked In",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    return;
+                }
+
+                if (reservation.Status == "Cancelled")
+                {
+                    MessageBox.Show(
+                        "Cancelled reservations cannot be checked in.",
+                        "Check-in Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
                 DatabaseService.UpdateReservationStatus(reservation.ReservationId, "Checked In");
+                DatabaseService.UpdateRoomStatus(reservation.RoomId, "Occupied");
+
                 LoadGuests();
             }
         }
@@ -53,11 +92,39 @@ namespace calendarrrrrrrrrr
         {
             if ((sender as Button)?.DataContext is Reservation reservation)
             {
+                DateTime today = DateTime.Today;
+
+                if (reservation.CheckOut.Date != today)
+                {
+                    MessageBox.Show(
+                        $"This guest cannot check out today.\n\n" +
+                        $"Booked check-out date: {reservation.CheckOut:MMMM dd, yyyy}\n" +
+                        $"Today: {today:MMMM dd, yyyy}",
+                        "Check-out Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                if (reservation.Status != "Checked In")
+                {
+                    MessageBox.Show(
+                        "Only checked-in guests can be checked out.",
+                        "Check-out Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
                 DatabaseService.UpdateReservationStatus(reservation.ReservationId, "Checked Out");
+                DatabaseService.UpdateRoomStatus(reservation.RoomId, "Available");
+
                 LoadGuests();
             }
         }
-            
+
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.DataContext is Reservation reservation)

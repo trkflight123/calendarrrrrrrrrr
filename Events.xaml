@@ -11,6 +11,17 @@
         Background="#C1E1C1"
         ResizeMode="CanResize">
 
+    <Window.Resources>
+        <Style TargetType="DatePicker">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Background" Value="#E5E5E5"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#CFCFCF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
+
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
 
@@ -208,12 +219,10 @@
                                            VerticalAlignment="Center"/>
 
                                 <DatePicker x:Name="dpEventDate"
-                                            Grid.Column="1"
-                                            Height="42"
-                                            Background="White"
-                                            Foreground="Black"
-                                            FontSize="15"
-                                            VerticalContentAlignment="Center" Margin="50,0,0,0"/>
+            Grid.Column="1"
+            Width="180"
+            Margin="50,0,0,0"
+            SelectedDateChanged="DatePicker_SelectedDateChanged"/>
 
                                 <TextBlock Text="Time"
                                            Grid.Column="2"

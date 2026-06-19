@@ -17,9 +17,10 @@
         </Grid.ColumnDefinitions>
 
         <!-- LEFT SIDEBAR -->
-        <Border Background="#F8F8F6"
-        BorderBrush="#4A8150"
-        BorderThickness="1">
+        <Border Grid.Column="0"
+                Background="#F8F8F6"
+                BorderBrush="#4A8150"
+                BorderThickness="1">
 
             <Grid Margin="18">
                 <Grid.RowDefinitions>
@@ -31,19 +32,19 @@
                 <!-- PROFILE -->
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,45">
                     <Image Source="Assets/logo.png"
-                   Width="58"
-                   Height="58"
-                   Stretch="Uniform"/>
+                           Width="58"
+                           Height="58"
+                           Stretch="Uniform"/>
 
                     <StackPanel Margin="12,7,0,0">
                         <TextBlock Text="Hotel Yncierto"
-                           FontSize="15"
-                           FontWeight="Bold"
-                           Foreground="Black"/>
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="Black"/>
 
                         <TextBlock Text="Front Desk"
-                           FontSize="13"
-                           Foreground="#6B7280"/>
+                                   FontSize="13"
+                                   Foreground="#6B7280"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -51,278 +52,557 @@
                 <StackPanel Grid.Row="1">
 
                     <Button Content="🏠  Dashboard"
-                    Height="45"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Left"
-                    FontSize="14"
-                    Margin="0,0,0,14"
-                    Click="Dashboard_Click"/>
+                            Height="45"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalContentAlignment="Left"
+                            FontSize="14"
+                            Margin="0,0,0,14"
+                            Click="Dashboard_Click"/>
 
                     <Button Content="📅  Calendar/Reservation"
-                    Height="45"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Left"
-                    FontSize="14"
-                    Margin="0,0,0,14"
-                    Click="Calendar_Click"/>
+                            Height="45"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalContentAlignment="Left"
+                            FontSize="14"
+                            Margin="0,0,0,14"
+                            Click="Calendar_Click"/>
 
                     <Button Content="👤  Guest"
-                    Height="45"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Left"
-                    FontSize="14"
-                    Margin="0,0,0,14"
-                    Click="Guest_Click"/>
-
-                    
+                            Height="45"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalContentAlignment="Left"
+                            FontSize="14"
+                            Margin="0,0,0,14"
+                            Click="Guest_Click"/>
 
                     <TextBlock Text="Others"
-                       FontWeight="Bold"
-                       FontSize="14"
-                       Margin="0,0,0,14"/>
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Margin="0,0,0,14"/>
 
                     <Button Content="📦  Found Items"
-                    Height="45"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    HorizontalContentAlignment="Left"
-                    FontSize="14"
-                    Margin="0,0,0,14" Click="Button_Click"/>
+                            Height="45"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalContentAlignment="Left"
+                            FontSize="14"
+                            Margin="0,0,0,14"
+                            Click="Button_Click"/>
 
                     <Button Content="🎉  Events"
-        Height="45"
-        Background="Transparent"
-        BorderThickness="0"
-        HorizontalContentAlignment="Left"
-        FontSize="14"
-        Click="Events_Click"/>
+                            Height="45"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalContentAlignment="Left"
+                            FontSize="14"
+                            Click="Events_Click"/>
                 </StackPanel>
 
                 <!-- LOGOUT -->
                 <Button Grid.Row="2"
-                Content="↩  Exit"
-                Height="55"
-                Background="White"
-                BorderBrush="#4A8150"
-                BorderThickness="1"
-                Foreground="#4A8150"
-                FontSize="14"
-                FontWeight="SemiBold"
-                Click="Logout_Click"/>
+                        Content="↩  Log Out"
+                        Height="55"
+                        Background="White"
+                        BorderBrush="#4A8150"
+                        BorderThickness="1"
+                        Foreground="#4A8150"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Click="Logout_Click"/>
             </Grid>
         </Border>
 
         <!-- MAIN CONTENT -->
         <Grid Grid.Column="1" Margin="30">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="361*"/>
-                <ColumnDefinition Width="189*"/>
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="135"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="230"/>
             </Grid.RowDefinitions>
 
             <!-- HEADER -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.ColumnSpan="2">
-                <TextBlock Text="{Binding Greeting}"
-                           FontSize="32"
-                           FontWeight="Bold"
-                           Foreground="Black"/>
-            </StackPanel>
-
-            <!-- DASHBOARD BODY -->
-            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
-                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Greeting}"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="Black"/>
+
+                    <TextBlock Text="{Binding TodayDate}"
+                               FontSize="15"
+                               Foreground="#4B5563"
+                               Margin="2,5,0,0"/>
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Background="#F8F8F6"
+                        BorderBrush="#4A8150"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="18,10"
+                        VerticalAlignment="Center">
+
+                    <TextBlock Text="Front Desk Overview"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#1F4A2A"/>
+                </Border>
+            </Grid>
+
+            <!-- TOP STAT CARDS -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- LEFT CARDS -->
-                <Grid Grid.Column="0">
+                <Border Grid.Column="0"
+                        Background="#4A8150"
+                        CornerRadius="14"
+                        Padding="20">
+
+                    <StackPanel>
+                        <TextBlock Text="Total Rooms"
+                                   Foreground="White"
+                                   FontSize="14"/>
+
+                        <TextBlock Text="{Binding TotalRooms}"
+                                   Foreground="#FFD65A"
+                                   FontSize="38"
+                                   FontWeight="Bold"
+                                   Margin="0,8,0,0"/>
+
+                        <TextBlock Text="Registered rooms"
+                                   Foreground="White"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2"
+                        Background="#4A8150"
+                        CornerRadius="14"
+                        Padding="20">
+
+                    <StackPanel>
+                        <TextBlock Text="Available Rooms"
+                                   Foreground="White"
+                                   FontSize="14"/>
+
+                        <TextBlock Text="{Binding AvailableRooms}"
+                                   Foreground="#FFD65A"
+                                   FontSize="38"
+                                   FontWeight="Bold"
+                                   Margin="0,8,0,0"/>
+
+                        <TextBlock Text="Ready for booking"
+                                   Foreground="White"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="4"
+                        Background="#4A8150"
+                        CornerRadius="14"
+                        Padding="20">
+
+                    <StackPanel>
+                        <TextBlock Text="Occupied Rooms"
+                                   Foreground="White"
+                                   FontSize="14"/>
+
+                        <TextBlock Text="{Binding OccupiedRooms}"
+                                   Foreground="#FFD65A"
+                                   FontSize="38"
+                                   FontWeight="Bold"
+                                   Margin="0,8,0,0"/>
+
+                        <TextBlock Text="Currently occupied"
+                                   Foreground="White"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="6"
+                        Background="#4A8150"
+                        CornerRadius="14"
+                        Padding="20">
+
+                    <StackPanel>
+                        <TextBlock Text="Revenue This Month"
+                                   Foreground="White"
+                                   FontSize="14"/>
+
+                        <TextBlock Text="{Binding RevenueThisMonth}"
+                                   Foreground="#FFD65A"
+                                   FontSize="31"
+                                   FontWeight="Bold"
+                                   Margin="0,12,0,0"/>
+
+                        <TextBlock Text="Completed payments"
+                                   Foreground="White"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- MIDDLE CONTENT -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- MONTHLY SALES GRAPH -->
+                <Border Grid.Column="0"
+                        Background="#F8F8F6"
+                        CornerRadius="14"
+                        Padding="25"
+                        BorderBrush="#4A8150"
+                        BorderThickness="1">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="Monthly Sales Graph"
+                                           FontSize="25"
+                                           FontWeight="Bold"
+                                           Foreground="#1F4A2A"/>
+
+                                <TextBlock Text="Sales performance for this year"
+                                           FontSize="13"
+                                           Foreground="#6B7280"
+                                           Margin="0,4,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding TotalSalesOverall}"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#1F4A2A"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl Grid.Row="1"
+                                      ItemsSource="{Binding MonthlySales}"
+                                      Margin="0,20,0,0">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="6,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="28"/>
+                                            <RowDefinition Height="25"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid Grid.Row="0"
+                                              Height="260"
+                                              VerticalAlignment="Bottom">
+
+                                            <Border Width="42"
+                                                    Height="{Binding BarHeight}"
+                                                    Background="#4A8150"
+                                                    CornerRadius="8,8,0,0"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"/>
+                                        </Grid>
+
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding SalesText}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#1F4A2A"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+
+                                        <TextBlock Grid.Row="2"
+                                                   Text="{Binding Month}"
+                                                   FontSize="13"
+                                                   Foreground="Black"
+                                                   HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+
+                <!-- RIGHT SIDE DETAILS -->
+                <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="390"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- AVAILABLE ROOMS -->
+                    <!-- OCCUPANCY RATE -->
                     <Border Grid.Row="0"
-            Background="#4A8150"
-            CornerRadius="10"
-            Padding="18">
+                            Background="#4A8150"
+                            CornerRadius="14"
+                            Padding="24">
 
-                        <ItemsControl x:Name="RoomsList">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Border Height="220"
-                                CornerRadius="8"
-                                ClipToBounds="True"
-                                Background="#EAEAEA">
+                        <StackPanel>
+                            <TextBlock Text="Occupancy Rate"
+                                       Foreground="White"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
 
-                                            <Image Source="{Binding ImagePath}"
-                                   Stretch="UniformToFill"/>
-                                        </Border>
-
-                                        <StackPanel Margin="0,12,0,0">
-                                            <TextBlock Text="{Binding RoomName}"
+                            <TextBlock Text="{Binding OccupancyRate}"
                                        Foreground="#FFD65A"
-                                       FontSize="24"
+                                       FontSize="52"
                                        FontWeight="Bold"
-                                       TextWrapping="Wrap"
-                                       Margin="0,0,0,6"/>
+                                       Margin="0,18,0,0"/>
 
-                                            <TextBlock Text="{Binding Price}"
-                                       Foreground="#FFD65A"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,4"/>
+                            <TextBlock Text="{Binding OccupancyDescription}"
+                                       Foreground="White"
+                                       FontSize="14"
+                                       TextWrapping="Wrap"/>
 
-                                            <TextBlock Text="{Binding Capacity}"
-                                       Foreground="#FFD65A"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,4"/>
-
-                                            <TextBlock Text="{Binding Status}"
-                                       Foreground="#FFD65A"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"/>
-                                        </StackPanel>
-
-                                        <TextBlock Text="•••"
-                                   Foreground="#1F4A2A"
-                                   FontSize="18"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,10,0,0"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            <ProgressBar Value="{Binding OccupancyValue}"
+                                         Maximum="100"
+                                         Height="12"
+                                         Margin="0,22,0,0"/>
+                        </StackPanel>
                     </Border>
 
-                    <!-- ABOUT US -->
+                    <!-- BOOKING SUMMARY -->
                     <Border Grid.Row="2"
-        Background="#4A8150"
-        CornerRadius="10"
-        Padding="28">
+                            Background="#F8F8F6"
+                            BorderBrush="#4A8150"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="24">
 
-                        <Grid>
+                        <StackPanel>
+                            <TextBlock Text="Booking Summary"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#1F4A2A"
+                                       Margin="0,0,0,15"/>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <!-- TITLE -->
-                            <TextBlock Text="ⓘ About Us"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="White"/>
+                                <TextBlock Text="Pending"
+                                           FontSize="15"
+                                           Foreground="#333"/>
 
-                            <!-- SCROLLABLE CONTENT -->
-                            <ScrollViewer Grid.Row="1"
-                      Margin="0,18,0,0"
-                      VerticalScrollBarVisibility="Auto">
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding PendingBookings}"
+                                           FontSize="15"
+                                           FontWeight="Bold"
+                                           Foreground="#1F4A2A"/>
+                            </Grid>
 
-                                <StackPanel>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Welcome to Hotel Yncierto, where comfort, elegance, and exceptional hospitality come together to create a memorable stay for every guest."
-                           TextWrapping="Wrap"
-                           FontSize="18"
-                           Foreground="White"
-                           LineHeight="30"
-                           Margin="0,0,0,18"/>
+                                <TextBlock Text="Confirmed"
+                                           FontSize="15"
+                                           Foreground="#333"/>
 
-                                    <TextBlock Text="Located in a relaxing and welcoming environment, Hotel Yncierto is dedicated to providing high-quality accommodations, excellent customer service, and a peaceful atmosphere suited for both leisure and business travelers."
-                           TextWrapping="Wrap"
-                           FontSize="18"
-                           Foreground="White"
-                           LineHeight="30"
-                           Margin="0,0,0,18"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding ConfirmedBookings}"
+                                           FontSize="15"
+                                           FontWeight="Bold"
+                                           Foreground="#1F4A2A"/>
+                            </Grid>
 
-                                    <TextBlock Text="Our hotel offers comfortable rooms, reliable amenities, and personalized guest assistance to ensure every visitor experiences convenience, safety, and satisfaction throughout their stay."
-                           TextWrapping="Wrap"
-                           FontSize="18"
-                           Foreground="White"
-                           LineHeight="30"
-                           Margin="0,0,0,18"/>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="At Hotel Yncierto, we value professionalism, cleanliness, and genuine hospitality. We strive to make every guest feel at home while delivering a relaxing and enjoyable hotel experience."
-                           TextWrapping="Wrap"
-                           FontSize="18"
-                           Foreground="White"
-                           LineHeight="30"/>
+                                <TextBlock Text="Completed"
+                                           FontSize="15"
+                                           Foreground="#333"/>
 
-                                </StackPanel>
-                            </ScrollViewer>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding CompletedBookings}"
+                                           FontSize="15"
+                                           FontWeight="Bold"
+                                           Foreground="#1F4A2A"/>
+                            </Grid>
 
-                        </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Cancelled"
+                                           FontSize="15"
+                                           Foreground="#333"/>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding CancelledBookings}"
+                                           FontSize="15"
+                                           FontWeight="Bold"
+                                           Foreground="#1F4A2A"/>
+                            </Grid>
+                        </StackPanel>
                     </Border>
                 </Grid>
-                
-                
-                <!-- RIGHT STATUS CARD -->
-                <Border Grid.Column="2"
-                        Background="#4A8150"
-                        CornerRadius="10"
-                        Padding="35">
+            </Grid>
+
+            <!-- BOTTOM TABLES -->
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- RECENT BOOKINGS -->
+                <Border Grid.Column="0"
+                        Background="#F8F8F6"
+                        BorderBrush="#4A8150"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="22">
 
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="70"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Room Status for Today"
-                                   FontSize="26"
+                        <TextBlock Text="Recent Bookings"
+                                   FontSize="23"
                                    FontWeight="Bold"
                                    Foreground="#1F4A2A"
-                                   VerticalAlignment="Center"/>
+                                   Margin="0,0,0,15"/>
 
                         <DataGrid Grid.Row="1"
-                              x:Name="RoomStatusGrid"
-                              AutoGenerateColumns="False"
-                              Background="White"
-                              BorderThickness="0"
-                              FontSize="14"
-
-                              IsReadOnly="True"
-                              CanUserResizeColumns="False"
-                              CanUserResizeRows="False"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              CanUserReorderColumns="False"
-
-                              HeadersVisibility="Column"
-                              GridLinesVisibility="Horizontal"
-                              SelectionMode="Single"
-                              SelectionUnit="FullRow">
+                                  ItemsSource="{Binding RecentBookings}"
+                                  AutoGenerateColumns="False"
+                                  Background="White"
+                                  BorderThickness="0"
+                                  FontSize="13"
+                                  IsReadOnly="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserResizeRows="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserReorderColumns="False"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow">
 
                             <DataGrid.Columns>
+                                <DataGridTextColumn Header="Guest"
+                                                    Binding="{Binding GuestName}"
+                                                    Width="*"/>
+
                                 <DataGridTextColumn Header="Room"
                                                     Binding="{Binding RoomName}"
                                                     Width="*"/>
 
-                                <DataGridTextColumn Header="Room Type"
-                                                    Binding="{Binding RoomType}"
+                                <DataGridTextColumn Header="Check In"
+                                                    Binding="{Binding CheckIn}"
                                                     Width="*"/>
 
-                                <DataGridTextColumn Header="Room Capacity"
-                                                    Binding="{Binding Capacity}"
+                                <DataGridTextColumn Header="Check Out"
+                                                    Binding="{Binding CheckOut}"
                                                     Width="*"/>
 
                                 <DataGridTextColumn Header="Status"
                                                     Binding="{Binding Status}"
                                                     Width="*"/>
+
+                                <DataGridTextColumn Header="Amount"
+                                                    Binding="{Binding Amount}"
+                                                    Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- ROOM ALERTS -->
+                <Border Grid.Column="2"
+                        Background="#4A8150"
+                        CornerRadius="14"
+                        Padding="22">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Room Alerts"
+                                   FontSize="23"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="0,0,0,15"/>
+
+                        <ItemsControl Grid.Row="1"
+                                      ItemsSource="{Binding RoomAlerts}">
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F8F8F6"
+                                            CornerRadius="10"
+                                            Padding="12"
+                                            Margin="0,0,0,10">
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding AlertTitle}"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"
+                                                       Foreground="#1F4A2A"/>
+
+                                            <TextBlock Text="{Binding AlertDescription}"
+                                                       FontSize="13"
+                                                       Foreground="#374151"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </Border>
             </Grid>

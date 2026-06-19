@@ -268,7 +268,7 @@
                                         </Button.Template>
                                     </Button>
 
-                                    <Button Content="✕"
+                                    <Button Content="Cancel"
         Width="50"
         Height="27"
         Background="#DC2626"

@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -178,6 +178,15 @@ namespace calendarrrrrrrrrr
         {
             currentMonth = currentMonth.AddMonths(1);
             LoadCalendar();
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dpEventDate.SelectedDate.HasValue)
+            {
+                dpEventDate.Foreground = Brushes.Black;
+                dpEventDate.Background = Brushes.White;
+            }
         }
     }
 }
