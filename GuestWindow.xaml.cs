@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
 using calendarrrrrrrrrr.Data;
@@ -10,6 +13,8 @@ namespace calendarrrrrrrrrr
     public partial class GuestWindow : Window
     {
         private List<Reservation> reservations = new();
+
+        private Reservation selectedReservationForCancellation;
 
         public GuestWindow()
         {
@@ -31,12 +36,12 @@ namespace calendarrrrrrrrrr
 
             GuestGrid.ItemsSource = reservations
                 .Where(r =>
-                    r.GuestName.ToLower().Contains(keyword) ||
-                    r.Phone.ToLower().Contains(keyword) ||
-                    r.Email.ToLower().Contains(keyword) ||
-                    r.Address.ToLower().Contains(keyword) ||
-                    r.RoomNumber.ToLower().Contains(keyword) ||
-                    r.Status.ToLower().Contains(keyword))
+                    (r.GuestName ?? "").ToLower().Contains(keyword) ||
+                    (r.Phone ?? "").ToLower().Contains(keyword) ||
+                    (r.Email ?? "").ToLower().Contains(keyword) ||
+                    (r.Address ?? "").ToLower().Contains(keyword) ||
+                    (r.RoomNumber ?? "").ToLower().Contains(keyword) ||
+                    (r.Status ?? "").ToLower().Contains(keyword))
                 .ToList();
         }
 
@@ -140,18 +145,188 @@ namespace calendarrrrrrrrrr
         {
             if ((sender as Button)?.DataContext is Reservation reservation)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    "Are you sure you want to cancel this reservation?",
-                    "Cancel Reservation",
-                    MessageBoxButton.YesNo,
+                if (reservation.Status == "Cancelled")
+                {
+                    MessageBox.Show(
+                        "This reservation is already cancelled.",
+                        "Already Cancelled",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    return;
+                }
+
+                if (reservation.Status == "Checked In")
+                {
+                    MessageBox.Show(
+                        "Checked-in guests cannot be cancelled. Please check out the guest first.",
+                        "Cancellation Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                if (reservation.Status == "Checked Out")
+                {
+                    MessageBox.Show(
+                        "Checked-out reservations cannot be cancelled.",
+                        "Cancellation Not Allowed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    return;
+                }
+
+                selectedReservationForCancellation = reservation;
+                txtCancellationReason.Clear();
+                CancellationOverlay.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CloseCancellationOverlay_Click(object sender, RoutedEventArgs e)
+        {
+            txtCancellationReason.Clear();
+            selectedReservationForCancellation = null;
+            CancellationOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConfirmCancellation_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedReservationForCancellation == null)
+            {
+                MessageBox.Show(
+                    "No reservation selected.",
+                    "Cancellation Error",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Warning);
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    DatabaseService.UpdateReservationStatus(reservation.ReservationId, "Cancelled");
-                    LoadGuests();
-                }
+                return;
             }
+
+            string reason = txtCancellationReason.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                MessageBox.Show(
+                    "Please enter the reason for cancellation.",
+                    "Reason Required",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                "Are you sure you want to cancel this reservation?",
+                "Confirm Cancellation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                Reservation reservation = selectedReservationForCancellation;
+
+                DatabaseService.UpdateReservationStatus(reservation.ReservationId, "Cancelled");
+                DatabaseService.UpdateRoomStatus(reservation.RoomId, "Available");
+
+                try
+                {
+                    SendCancellationEmail(
+                        reservation.Email,
+                        reservation.GuestName,
+                        reservation.RoomNumber,
+                        reservation.RoomType,
+                        reservation.CheckIn,
+                        reservation.CheckOut,
+                        reason
+                    );
+
+                    MessageBox.Show(
+                        "Reservation cancelled and cancellation email sent!",
+                        "Cancellation Successful",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                catch (Exception emailEx)
+                {
+                    MessageBox.Show(
+                        "Reservation cancelled, but cancellation email was not sent.\n\n" +
+                        "Email error: " + emailEx.Message,
+                        "Email Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
+
+                txtCancellationReason.Clear();
+                selectedReservationForCancellation = null;
+                CancellationOverlay.Visibility = Visibility.Collapsed;
+
+                LoadGuests();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Cancellation failed: " + ex.Message,
+                    "Cancellation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void SendCancellationEmail(
+            string customerEmail,
+            string customerName,
+            string roomNumber,
+            string roomType,
+            DateTime checkIn,
+            DateTime checkOut,
+            string reason)
+        {
+            string senderEmail = "k.karldonayre05@gmail.com";
+
+            //here, you need to generate an app password for your Gmail account and use it instead of your regular password.
+            string appPassword = "qczs hacb idho rfru";
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(senderEmail, "Hotel Yncierto");
+            mail.To.Add(customerEmail);
+            mail.Subject = "Hotel Yncierto Booking Cancellation Notice";
+
+            mail.Body =
+$@"Dear {customerName},
+
+Greetings from Hotel Yncierto.
+
+We would like to inform you that your room reservation has been cancelled.
+
+Below are the details of the cancelled booking:
+
+Room Type: {roomType}
+Room Number: {roomNumber}
+Check-In Date: {checkIn:MMMM dd, yyyy} at 3:00 PM
+Check-Out Date: {checkOut:MMMM dd, yyyy} at 10:00 AM
+
+Reason for Cancellation:
+{reason}
+
+We sincerely apologize for any inconvenience this may have caused. If you have any questions or concerns, please feel free to contact Hotel Yncierto for further assistance.
+
+Thank you for your understanding.
+
+Best regards,
+
+Hotel Yncierto
+Reservations Team";
+
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential(senderEmail, appPassword);
+            smtp.EnableSsl = true;
+
+            smtp.Send(mail);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

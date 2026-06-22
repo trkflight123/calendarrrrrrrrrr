@@ -311,5 +311,55 @@ Reservations Team";
                     ClearInputs(depObj);
             }
         }
+
+        private void SendCancellationEmail(
+    string customerEmail,
+    string customerName,
+    string roomNumber,
+    string roomType,
+    DateTime checkIn,
+    DateTime checkOut,
+    string reason)
+        {
+            string senderEmail = "k.karldonayre05@gmail.com";
+            string appPassword = "YOUR_APP_PASSWORD_HERE";
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(senderEmail, "Hotel Yncierto");
+            mail.To.Add(customerEmail);
+            mail.Subject = "Hotel Yncierto Booking Cancellation Notice";
+
+            mail.Body =
+        $@"Dear {customerName},
+
+Greetings from Hotel Yncierto.
+
+We would like to inform you that your room reservation has been cancelled.
+
+Below are the details of the cancelled booking:
+
+Room Type: {roomType}
+Room Number: {roomNumber}
+Check-In Date: {checkIn:MMMM dd, yyyy} at 3:00 PM
+Check-Out Date: {checkOut:MMMM dd, yyyy} at 10:00 AM
+
+Reason for Cancellation:
+{reason}
+
+We sincerely apologize for any inconvenience this may have caused. If you have any questions or concerns, please feel free to contact Hotel Yncierto for further assistance.
+
+Thank you for your understanding.
+
+Best regards,
+
+Hotel Yncierto
+Reservations Team";
+
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential(senderEmail, appPassword);
+            smtp.EnableSsl = true;
+
+            smtp.Send(mail);
+        }
     }
 }
